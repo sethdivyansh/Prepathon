@@ -12,6 +12,8 @@ import HistoryPage from './pages/history.tsx';
 import LandingPage from './pages/landing.tsx';
 import AuthPage from './pages/auth.tsx';
 import ResponsePage from './pages/response.tsx';
+import EmailVerficationPage from './pages/emailverification.tsx';
+import ForgotPasswordPage from './pages/forgotpass.tsx';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +39,14 @@ const router = createBrowserRouter([
   {
     path: "/response",
     element: <ResponsePage/>,
+  },
+  {
+    path: "/forgotpassword",
+    element: <ForgotPasswordPage/>,
+  },
+  {
+    path: "/emailverify",
+    element: <EmailVerficationPage/>,
   },
 ]);
 
