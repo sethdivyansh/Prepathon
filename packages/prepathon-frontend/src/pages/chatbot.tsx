@@ -1,37 +1,32 @@
 import { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
 import HistoryItem from "@/components/layout/historyitem";
+import { useNavigate } from "react-router-dom";
 
-// HistoryItem Component to show past chats
 export default function ChatbotPage() {
-  // State to handle chat input
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
   const [greeting, setGreeting] = useState("Good Morning");
-
-  // Example prompt and history items data
+  const navigate = useNavigate();
   const examplePrompts = [
     "Get me the data of all companies from India", 
     "What companies had expenses below 80,000,000 in 2014", 
     "What companies have a Diversity greater than 50%"
   ];
 
-  // Updated chatHistory array
   const chatHistory = [
     { title: "Indian Companies", description: "Fetched all companies based in India.", time: "5 hours ago" },
     { title: "Low Expense Companies", description: "Found companies with expenses below 80M in 2014.", time: "12 hours ago" },
     { title: "High Diversity", description: "Identified companies with diversity above 50%.", time: "1 day ago" },
   ];
 
-  // Handle sending a message
   const handleSendMessage = () => {
     if (input.trim()) {
       setMessages((prevMessages) => [...prevMessages, input]);
-      setInput(""); // Clear input field after sending message
+      setInput("");
     }
   };
 
-  // Dynamically set the greeting based on the time of day
   useEffect(() => {
     const currentHour = new Date().getHours();
     if (currentHour < 12) {
@@ -41,20 +36,24 @@ export default function ChatbotPage() {
     } else {
       setGreeting("Good Evening");
     }
-  }, []); // The empty dependency array ensures this runs once when the component mounts
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-slate-600 to-slate-950 text-white p-6 flex flex-col justify-between">
-      {/* Greeting Section */}
-      <header className="text-center py-4">
+      <header className="flex justify-between items-center py-4">
         <h1 className="text-3xl font-bold">{greeting}, User</h1>
+        {/* History Button positioned to the right */}
+        <Button 
+          className="mt-2 bg-gray-800 hover:bg-gray-700 transition-colors duration-200 ease-in-out text-white"
+          onClick={() => navigate('/history')} // Placeholder action
+        >
+          History
+        </Button>
       </header>
 
-      {/* Chatbot Interaction Section */}
       <section className="flex justify-center mt-4">
         <div className="w-full sm:w-2/3 md:w-1/2 bg-gray-800 p-4 rounded-lg shadow-md">
           <h2 className="text-xl text-center font-semibold mb-4">Enter your prompt here!</h2>
-          {/* Input field for typing */}
           <div className="flex items-center">
             <input
               type="text"
@@ -73,7 +72,6 @@ export default function ChatbotPage() {
         </div>
       </section>
 
-      {/* Example Prompts */}
       <section className="mt-6 text-center">
         <p className="text-lg text-gray-400">How can I assist you today?</p>
         <div className="mt-4 flex flex-wrap justify-center gap-4">

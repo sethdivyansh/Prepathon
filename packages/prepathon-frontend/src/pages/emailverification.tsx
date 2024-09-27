@@ -10,20 +10,14 @@ export default function EmailVerificationPage() {
           <p className="text-center text-gray-600">
             Enter the OTP that has been sent to your email address.
           </p>
-
-          {/* OTP Input */}
           <Input
             type="text"
             placeholder="Enter your OTP"
             className="w-full"
           />
-
-          {/* Verify Button */}
           <Button className="w-full bg-indigo-500 hover:bg-indigo-600 text-white">
             Verify OTP
           </Button>
-
-          {/* Resend OTP Link */}
           <div className="text-center mt-4">
             <a href="#resend-otp" className="text-sm text-indigo-500 hover:underline">
               Didn't receive an OTP? Resend
