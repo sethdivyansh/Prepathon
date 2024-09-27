@@ -9,17 +9,7 @@ export default function AuthPage() {
           Turn your thoughts into reality
         </h1>
         <div className="space-y-4">
-          <Button className="w-full bg-white text-gray-700 border border-gray-300 hover:bg-gray-50">
-            <img
-              src="https://img.icons8.com/color/24/google-logo.png"
-              alt="Google Logo"
-              className="inline mr-2"
-            />
-            Continue with Google
-          </Button>
-
-          <div className="text-center text-sm text-gray-500">OR</div>
-          <Input
+        <Input
             type="email"
             placeholder="name@yourcompany.com"
             className="w-full"
@@ -37,6 +27,28 @@ export default function AuthPage() {
               Forgot password?
             </button>
           </div>
+          
+
+          <div className="text-center text-sm text-gray-500">OR</div>
+          
+          <Button className="w-full bg-white text-gray-900 hover:bg-gray-200">
+            <img
+              src="https://img.icons8.com/color/24/google-logo.png"
+              alt="GitHub Logo"
+              className="inline mr-2"
+            />
+            Continue with Google
+          </Button>
+
+          {/* New GitHub Button */}
+          <Button className="w-full bg-white text-gray-900 hover:bg-gray-200">
+            <img
+              src="https://img.icons8.com/ios-glyphs/24/github.png"
+              alt="GitHub Logo"
+              className="inline mr-2"
+            />
+            Continue with GitHub
+          </Button>
         </div>
       </div>
     </div>
