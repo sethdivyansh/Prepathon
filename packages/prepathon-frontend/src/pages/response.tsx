@@ -1,10 +1,92 @@
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { useState } from 'react';
 
 // Register chart components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+interface SidebarProps {
+  lightMode: boolean; // Added prop to pass light mode
+}
+
+function Sidebar({ lightMode }: SidebarProps) {
+  const companies = [
+    { name: 'Zooxo', flag: '🇺🇦' },
+    { name: 'Abatz', flag: '🇵🇱' },
+    { name: 'Youbridge', flag: '🇧🇷' },
+    // Add more companies as needed
+  ];
+
+  return (
+    <div className={`w-1/4 p-4 ${lightMode ? 'bg-neutral-200 text-neutral-900' : 'bg-neutral-800 text-neutral-100'} h-full`}>
+      <h3 className="font-bold text-lg mb-4">Recently Searched</h3>
+      <ul>
+        {companies.map((company, index) => (
+          <li key={index} className="mb-2 flex items-center">
+            <span className="mr-2">{company.flag}</span>
+            {company.name}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+interface CompanyInfoProps {
+  data: {
+    country: string;
+    countryCode: string;
+    diversity: string;
+    marketCap: number;
+  };
+  theme: 'light' | 'dark'; // Prop to toggle between light and dark modes
+}
+
+function CompanyInfo({ data, theme }: CompanyInfoProps) {
+  return (
+    <div
+      className={`p-4 rounded-lg shadow-md ${
+        theme === 'dark' ? 'bg-neutral-800 text-neutral-100' : 'bg-white text-neutral-900'
+      }`}
+    >
+      <h2 className="text-2xl font-bold mb-4">Company Information</h2>
+      <p>
+        <strong>Country:</strong> {data.country}
+      </p>
+      <p>
+        <strong>Country Code:</strong> {data.countryCode}
+      </p>
+      <p>
+        <strong>Diversity Index:</strong> {data.diversity}
+      </p>
+      <p>
+        <strong>Market Cap:</strong> ${data.marketCap.toLocaleString()}
+      </p>
+    </div>
+  );
+}
+
+import { ChartData, ChartOptions } from 'chart.js';
+
+interface ChartCardProps {
+  title: string;
+  data: ChartData<'line'>; // Specify 'line' chart
+  options: ChartOptions<'line'>; // Specify 'line' chart
+  lightMode: boolean; // Added prop for light mode
+}
+
+function ChartCard({ title, data, options, lightMode }: ChartCardProps) {
+  return (
+    <div className={`p-4 ${lightMode ? 'bg-white text-neutral-900' : 'bg-neutral-800 text-neutral-100'} rounded-lg shadow-md`}>
+      <h3 className="text-xl font-semibold mb-2">{title}</h3>
+      <Line data={data} options={options} />
+    </div>
+  );
+}
+
 export default function ResponsePage() {
+  const [lightMode, setLightMode] = useState(false);
+
   const zooxoData = {
     name: "Zooxo",
     country: "Ukraine",
@@ -62,21 +144,15 @@ export default function ResponsePage() {
   const chartOptions = {
     scales: {
       x: {
-        ticks: {
-          color: '#000000', // Brighter color for x-axis labels
-        },
+        ticks: { color: lightMode ? '#000000' : '#FFFFFF' },
       },
       y: {
-        ticks: {
-          color: '#000000', // Brighter color for y-axis labels
-        },
+        ticks: { color: lightMode ? '#000000' : '#FFFFFF' },
       },
     },
     plugins: {
       legend: {
-        labels: {
-          color: '#00000', // Brighter color for the legend text
-        },
+        labels: { color: lightMode ? '#000000' : '#FFFFFF' },
       },
     },
   };
@@ -134,38 +210,28 @@ export default function ResponsePage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-6xl m-10">
-        <h1 className="text-4xl font-bold text-center mb-6 text-neutral-800">Zooxo Company Overview</h1>
+    <div className={`flex ${lightMode ? 'bg-neutral-100 text-neutral-900' : 'bg-neutral-900 text-neutral-100'} min-h-screen`}>
+      <Sidebar lightMode={lightMode} />
+      <div className="flex-1 p-8">
+        <header className="flex justify-between mb-8">
+          <h1 className="text-4xl font-bold">Zooxo Company Overview</h1>
+          <button
+            onClick={() => setLightMode(!lightMode)}
+            className={`p-2 rounded-md ${lightMode ? 'bg-neutral-700 text-white' : 'bg-neutral-200 text-black'}`}
+          >
+            {lightMode ? 'Enable Dark Mode' : 'Enable Light Mode'}
+          </button>
+        </header>
 
-        {/* Company Info Section */}
-        <div className="p-6 rounded-lg mb-6 w-full">
-          <h2 className="text-2xl font-bold mb-4">Company Information</h2>
-          <p className=""><strong>Name:</strong> {zooxoData.name}</p>
-          <p className=""><strong>Country:</strong> {zooxoData.country}</p>
-          <p className=""><strong>Country Code:</strong> {zooxoData.countryCode}</p>
-          <p className=""><strong>Diversity Index:</strong> {zooxoData.diversity}</p>
-          <p className=""><strong>Market Cap:</strong> ${zooxoData.marketCap.toLocaleString()}</p>
+        <div className="mb-8">
+          <CompanyInfo data={zooxoData} theme={lightMode ? 'light' : 'dark'} />
         </div>
 
-        {/* Chart Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <h2 className="text-xl font-semibold mb-2 text-neutral-800">Stock Price</h2>
-            <Line data={stockPriceData} options={chartOptions} />
-          </div>
-          <div>
-            <h2 className="text-xl font-semibold mb-2 text-neutral-800">Expense</h2>
-            <Line data={expenseData} options={chartOptions} />
-          </div>
-          <div>
-            <h2 className="text-xl font-semibold mb-2 text-neutral-800">Revenue</h2>
-            <Line data={revenueData} options={chartOptions} />
-          </div>
-          <div>
-            <h2 className="text-xl font-semibold mb-2 text-neutral-800">Market Share</h2>
-            <Line data={marketShareData} options={chartOptions} />
-          </div>
+          <ChartCard title="Stock Price" data={stockPriceData} options={chartOptions} lightMode={lightMode} />
+          <ChartCard title="Expense" data={expenseData} options={chartOptions} lightMode={lightMode} />
+          <ChartCard title="Revenue" data={revenueData} options={chartOptions} lightMode={lightMode} />
+          <ChartCard title="Market Share" data={marketShareData} options={chartOptions} lightMode={lightMode} />
         </div>
       </div>
     </div>
