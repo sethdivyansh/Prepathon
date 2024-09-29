@@ -5,7 +5,6 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default function ResponsePage() {
-  // Company data
   const zooxoData = {
     name: "Zooxo",
     country: "Ukraine",
@@ -58,10 +57,30 @@ export default function ResponsePage() {
     ],
   };
 
-  // Extract the years
   const years = zooxoData.stockPrice.map((item) => item.year);
 
-  // Chart datasets
+  const chartOptions = {
+    scales: {
+      x: {
+        ticks: {
+          color: '#000000', // Brighter color for x-axis labels
+        },
+      },
+      y: {
+        ticks: {
+          color: '#000000', // Brighter color for y-axis labels
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        labels: {
+          color: '#00000', // Brighter color for the legend text
+        },
+      },
+    },
+  };
+
   const stockPriceData = {
     labels: years,
     datasets: [
@@ -115,36 +134,38 @@ export default function ResponsePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-slate-600 via-slate-800 to-slate-950 text-white p-6 flex flex-col items-center">
-      <h1 className="text-4xl font-bold mb-6">Zooxo Company Overview</h1>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-6xl m-10">
+        <h1 className="text-4xl font-bold text-center mb-6 text-neutral-800">Zooxo Company Overview</h1>
 
-      {/* Company Info Section */}
-      <div className="bg-gray-800 p-6 rounded-lg mb-6 w-full max-w-3xl">
-        <h2 className="text-2xl font-bold mb-4">Company Information</h2>
-        <p><strong>Name:</strong> {zooxoData.name}</p>
-        <p><strong>Country:</strong> {zooxoData.country}</p>
-        <p><strong>Country Code:</strong> {zooxoData.countryCode}</p>
-        <p><strong>Diversity Index:</strong> {zooxoData.diversity}</p>
-        <p><strong>Market Cap:</strong> ${zooxoData.marketCap.toLocaleString()}</p>
-      </div>
+        {/* Company Info Section */}
+        <div className="p-6 rounded-lg mb-6 w-full">
+          <h2 className="text-2xl font-bold mb-4">Company Information</h2>
+          <p className=""><strong>Name:</strong> {zooxoData.name}</p>
+          <p className=""><strong>Country:</strong> {zooxoData.country}</p>
+          <p className=""><strong>Country Code:</strong> {zooxoData.countryCode}</p>
+          <p className=""><strong>Diversity Index:</strong> {zooxoData.diversity}</p>
+          <p className=""><strong>Market Cap:</strong> ${zooxoData.marketCap.toLocaleString()}</p>
+        </div>
 
-      {/* Chart Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Stock Price</h2>
-          <Line data={stockPriceData} />
-        </div>
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Expense</h2>
-          <Line data={expenseData} />
-        </div>
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Revenue</h2>
-          <Line data={revenueData} />
-        </div>
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Market Share</h2>
-          <Line data={marketShareData} />
+        {/* Chart Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h2 className="text-xl font-semibold mb-2 text-neutral-800">Stock Price</h2>
+            <Line data={stockPriceData} options={chartOptions} />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold mb-2 text-neutral-800">Expense</h2>
+            <Line data={expenseData} options={chartOptions} />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold mb-2 text-neutral-800">Revenue</h2>
+            <Line data={revenueData} options={chartOptions} />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold mb-2 text-neutral-800">Market Share</h2>
+            <Line data={marketShareData} options={chartOptions} />
+          </div>
         </div>
       </div>
     </div>
