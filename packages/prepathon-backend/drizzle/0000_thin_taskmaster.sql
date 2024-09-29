@@ -27,6 +27,18 @@ CREATE TABLE `authenticator` (
 	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE TABLE `computations` (
+	`id` text PRIMARY KEY NOT NULL,
+	`companyId` text NOT NULL,
+	`companyName` text NOT NULL,
+	`status` text NOT NULL,
+	`startTime` integer NOT NULL,
+	`endTime` integer,
+	`result` text,
+	`userId` text NOT NULL,
+	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
 CREATE TABLE `session` (
 	`sessionToken` text PRIMARY KEY NOT NULL,
 	`userId` text NOT NULL,

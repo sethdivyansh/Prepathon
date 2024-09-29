@@ -79,3 +79,14 @@ export const authenticators = sqliteTable(
     }),
   })
 )
+
+export const computations = sqliteTable("computations", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  companyId: text("companyId").notNull(),
+  companyName: text("companyName").notNull(),
+  status: text("status").notNull(), // "running" or "completed"
+  startTime: integer("startTime").notNull(),
+  endTime: integer("endTime"),
+  result: text("result"),
+  userId: text("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+});
