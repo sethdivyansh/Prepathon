@@ -172,7 +172,7 @@ export default function ResponsePage() {
             <div className="flex-1 p-8">
                 <header className="mb-8 flex justify-between">
                     <h1 className="text-4xl font-bold">
-                        Zooxo Company Overview
+                        {companyData.name} Company Overview
                     </h1>
                     <button
                         onClick={() => setLightMode(!lightMode)}
