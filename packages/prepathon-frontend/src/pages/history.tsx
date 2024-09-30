@@ -2,9 +2,10 @@ import HistoryItem from '@/components/layout/historyitem';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
+import { ChatHistoryItem } from './chatbot';
 
 export default function HistoryPage() {
-    const [chatHistory] = useState([
+    const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([
         {
             title: 'Indian Companies',
             description: 'Fetched all companies based in India.',
@@ -31,6 +32,7 @@ export default function HistoryPage() {
             time: '3 days ago',
         },
     ]);
+    
     const navigate = useNavigate();
     return (
         <div className="flex min-h-screen flex-col bg-gradient-to-r from-slate-600 to-slate-950 p-6 text-white">
