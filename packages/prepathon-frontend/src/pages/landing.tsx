@@ -1,3 +1,4 @@
+import { useSession } from '@hono/auth-js/react';
 import {
     BarElement,
     CategoryScale,
@@ -12,8 +13,8 @@ import {
 } from 'chart.js';
 import { useMemo, useState } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
-import { Button } from '../components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../components/ui/button';
 
 ChartJS.register(
     CategoryScale,
@@ -90,8 +91,9 @@ const barChartData = {
 };
 
 export default function LandingPage() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [darkMode, setDarkMode] = useState(true);
+    const { data: session } = useSession();
 
     const chartOptions = useMemo(
         () => ({
@@ -136,44 +138,57 @@ export default function LandingPage() {
         [darkMode]
     );
 
-    return (
-        <div
-            className={`min-h-screen ${darkMode ? 'bg-neutral-900 text-white' : 'bg-white text-neutral-900'}`}
-        >
-            <div className="container mx-auto px-4 py-8">
-                <header className="mb-16 flex items-center justify-between">
-                    <div className="text-2xl font-bold">LOGO</div>
-                    <Button
-                        onClick={() => setDarkMode(!darkMode)}
-                        className={`rounded-md px-4 py-2 ${darkMode ? 'bg-neutral-700 text-white' : 'bg-neutral-200 text-black'}`}
-                    >
-                        {darkMode ? 'Enable Light Mode' : 'Enable Dark Mode'}
-                    </Button>
-                </header>
-                <main className="text-center">
-                    <h1 className="mb-4 text-5xl font-bold">
-                        Business insights,
-                        <br />
-                        at your fingertips.
-                    </h1>
-                    <p className="mb-8 text-xl text-neutral-400">
-                        Engineered for Real-Time Innovation.
-                    </p>
-                    <Button className="rounded-md bg-emerald-500 px-6 py-3 text-white hover:bg-emerald-600"
-                    onClick={() => navigate('/auth')}
-                    >
-                        Get Started
-                    </Button>
-                    <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2">
-                        <div className="h-80">
-                            <Line data={lineChartData} options={chartOptions} />
+    if (!session?.user)
+        return (
+            <div
+                className={`min-h-screen ${darkMode ? 'bg-neutral-900 text-white' : 'bg-white text-neutral-900'}`}
+            >
+                <div className="container mx-auto px-4 py-8">
+                    <header className="mb-16 flex items-center justify-between">
+                        <div className="text-2xl font-bold">LOGO</div>
+                        <Button
+                            onClick={() => setDarkMode(!darkMode)}
+                            className={`rounded-md px-4 py-2 ${darkMode ? 'bg-neutral-700 text-white' : 'bg-neutral-200 text-black'}`}
+                        >
+                            {darkMode
+                                ? 'Enable Light Mode'
+                                : 'Enable Dark Mode'}
+                        </Button>
+                    </header>
+                    <main className="text-center">
+                        <h1 className="mb-4 text-5xl font-bold">
+                            Business insights,
+                            <br />
+                            at your fingertips.
+                        </h1>
+                        <p className="mb-8 text-xl text-neutral-400">
+                            Engineered for Real-Time Innovation.
+                        </p>
+                        <Button
+                            className="rounded-md bg-emerald-500 px-6 py-3 text-white hover:bg-emerald-600"
+                            onClick={() => navigate('/auth')}
+                        >
+                            Get Started
+                        </Button>
+                        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2">
+                            <div className="h-80">
+                                <Line
+                                    data={lineChartData}
+                                    options={chartOptions}
+                                />
+                            </div>
+                            <div className="h-80">
+                                <Bar
+                                    data={barChartData}
+                                    options={chartOptions}
+                                />
+                            </div>
                         </div>
-                        <div className="h-80">
-                            <Bar data={barChartData} options={chartOptions} />
-                        </div>
-                    </div>
-                </main>
+                    </main>
+                </div>
             </div>
-        </div>
-    );
+        );
+    else {
+        navigate('/chat');
+    }
 }

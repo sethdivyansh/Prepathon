@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
 import './index.css';
+import { SessionProvider } from '@hono/auth-js/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import AuthPage from './pages/auth.tsx';
 import ChatbotPage from './pages/chatbot.tsx';
@@ -15,7 +15,7 @@ import ResponsePage from './pages/response.tsx';
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <LandingPage/>,
+        element: <LandingPage />,
     },
     {
         path: '/chat',
@@ -49,6 +49,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <RouterProvider router={router} />
+        <SessionProvider>
+            <RouterProvider router={router} />
+        </SessionProvider>
     </StrictMode>
 );

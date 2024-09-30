@@ -1,4 +1,5 @@
 import HistoryItem from '@/components/layout/historyitem';
+import { signOut } from '@hono/auth-js/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
@@ -37,7 +38,7 @@ export default function ChatbotPage() {
             setMessages((prevMessages) => [...prevMessages, input]);
             setInput('');
         }
-        navigate('/response')
+        navigate('/response');
     };
 
     useEffect(() => {
@@ -61,6 +62,15 @@ export default function ChatbotPage() {
                     onClick={() => navigate('/history')} // Placeholder action
                 >
                     History
+                </Button>
+                <Button
+                    className="mt-2 bg-gray-800 text-white transition-colors duration-200 ease-in-out hover:bg-gray-700"
+                    onClick={() => {
+                        signOut();
+                        navigate('/');
+                    }}
+                >
+                    Logout
                 </Button>
             </header>
 
