@@ -1,16 +1,15 @@
-// import Navbar from '@/components/layout/navbar';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { signIn, useSession } from '@hono/auth-js/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
 
-const RegisterPage = () => {
+export default function LoginPage() {
+    const { data: session } = useSession();
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const navigate = useNavigate();
     const theme = localStorage.getItem('theme') || 'light';
-    const { data: session } = useSession();
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -26,18 +25,18 @@ const RegisterPage = () => {
                     <div className="flex h-full items-center justify-center">
                         <form
                             onSubmit={handleSubmit}
-                            className="m-auto flex w-auto flex-col justify-items-start gap-5 rounded-xl p-8 shadow-box_shadow dark:bg-[#181818a3]"
+                            className="m-auto flex w-auto flex-col justify-items-start gap-5 rounded-xl p-8 shadow-box_shadow dark:bg-[#181818a3] md:w-[26rem]"
                         >
-                            <h1 className="text-2xl font-semibold text-primary md:text-[2.5rem]">
-                                Create New Account
+                            <h1 className="text-4xl font-semibold text-primary md:text-[2.5rem]">
+                                Login
                             </h1>
                             <p className="text-sm font-medium text-secondary">
-                                Already have an account?{' '}
+                                Don't have an Account?{' '}
                                 <span
                                     className="text-sm text-[#FF5126] hover:cursor-pointer hover:text-[#ff6b3d] dark:text-[#ff6b3d] dark:hover:text-[#FF5126]"
                                     onClick={() => navigate('/login')}
                                 >
-                                    Login
+                                    Create one
                                 </span>
                             </p>
                             <Input
@@ -54,11 +53,17 @@ const RegisterPage = () => {
                             />
                             <Button
                                 onClick={() => handleSubmit}
-                                className="text-md h-10 w-full rounded-lg bg-[#FF5126] font-semibold text-[#ffffff] hover:bg-[#ff6b3d] dark:bg-[#f36539] dark:hover:bg-[#FF5126] md:h-12"
+                                className="text-md bg-button_primary h-10 w-full rounded-lg font-semibold text-[#ffffff] hover:bg-[#ff6b3d] dark:hover:bg-[#FF5126] md:h-12"
                                 type="submit"
                             >
-                                Sign up
+                                Sign in
                             </Button>
+                            <a
+                                href="/forgotpass"
+                                className="text-button_primary -my-3 mr-4 text-right text-sm hover:underline"
+                            >
+                                Forgot Password?
+                            </a>
                             <div className="inset-0 flex flex-row items-center justify-between gap-x-2">
                                 <span className="w-full border-t border-gray-300 dark:border-[#505050]" />
                                 <span className="dark:text-[#505050]">OR</span>
@@ -74,7 +79,7 @@ const RegisterPage = () => {
                                         alt="GitHub Logo"
                                         className="mr-2 inline"
                                     />
-                                    Sign up
+                                    Sign in
                                 </Button>
                                 <Button
                                     className="h-8 w-full rounded-lg bg-white text-black shadow-box_shadow hover:bg-gray-100 dark:bg-[#1F1F1F] dark:text-[#828282] md:h-10"
@@ -93,7 +98,7 @@ const RegisterPage = () => {
                                             height: '24px',
                                         }}
                                     />
-                                    Sign up
+                                    Sign in
                                 </Button>
                             </div>
                         </form>
@@ -102,6 +107,4 @@ const RegisterPage = () => {
             </>
         );
     else return navigate('/chat');
-};
-
-export default RegisterPage;
+}
