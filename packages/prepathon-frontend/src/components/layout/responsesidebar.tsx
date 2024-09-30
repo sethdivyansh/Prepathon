@@ -5,8 +5,8 @@ interface SidebarProps {
 }
 
 interface CompanyInterface {
-    name: String,
-    flag: String
+    name: string,
+    flag: string
 }
 
 export default function Sidebar({ lightMode }: SidebarProps) {
