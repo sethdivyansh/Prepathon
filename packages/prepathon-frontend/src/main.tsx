@@ -15,7 +15,7 @@ import ResponsePage from './pages/response.tsx';
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <App />,
+        element: <LandingPage/>,
     },
     {
         path: '/chat',
@@ -24,10 +24,6 @@ const router = createBrowserRouter([
     {
         path: '/history',
         element: <HistoryPage />,
-    },
-    {
-        path: '/landing',
-        element: <LandingPage />,
     },
     {
         path: '/auth',

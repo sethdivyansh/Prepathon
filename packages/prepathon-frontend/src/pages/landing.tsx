@@ -13,6 +13,7 @@ import {
 import { useMemo, useState } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
 import { Button } from '../components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 ChartJS.register(
     CategoryScale,
@@ -89,6 +90,7 @@ const barChartData = {
 };
 
 export default function LandingPage() {
+    const navigate = useNavigate()
     const [darkMode, setDarkMode] = useState(true);
 
     const chartOptions = useMemo(
@@ -157,7 +159,9 @@ export default function LandingPage() {
                     <p className="mb-8 text-xl text-neutral-400">
                         Engineered for Real-Time Innovation.
                     </p>
-                    <Button className="rounded-md bg-emerald-500 px-6 py-3 text-white hover:bg-emerald-600">
+                    <Button className="rounded-md bg-emerald-500 px-6 py-3 text-white hover:bg-emerald-600"
+                    onClick={() => navigate('/auth')}
+                    >
                         Get Started
                     </Button>
                     <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2">
