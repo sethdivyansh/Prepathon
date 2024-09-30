@@ -1,8 +1,6 @@
 import {
     CategoryScale,
-    ChartData,
     Chart as ChartJS,
-    ChartOptions,
     Legend,
     LinearScale,
     LineElement,
@@ -11,7 +9,9 @@ import {
     Tooltip,
 } from 'chart.js';
 import { useState } from 'react';
-import { Bar, Line, Pie } from 'react-chartjs-2';
+import Sidebar from '@/components/layout/responsesidebar';
+import CompanyInfo from '@/components/layout/companyinforesponse';
+import ChartCard from '@/components/layout/chartcard';
 
 ChartJS.register(
     CategoryScale,
@@ -23,92 +23,26 @@ ChartJS.register(
     Legend
 );
 
-interface SidebarProps {
-    lightMode: boolean;
+interface YearlyValue {
+    year: number;
+    value: number;
 }
 
-function Sidebar({ lightMode }: SidebarProps) {
-    const companies = [
-        { name: 'Zooxo', flag: '🇺🇦' },
-        { name: 'Abatz', flag: '🇵🇱' },
-        { name: 'Youbridge', flag: '🇧🇷' },
-    ];
-
-    return (
-        <div
-            className={`w-1/4 p-4 ${lightMode ? 'bg-neutral-200 text-neutral-900' : 'bg-neutral-800 text-neutral-100'} h-full`}
-        >
-            <h3 className="mb-4 text-lg font-bold">Recently Searched</h3>
-            <ul>
-                {companies.map((company, index) => (
-                    <li key={index} className="mb-2 flex items-center">
-                        <span className="mr-2">{company.flag}</span>
-                        {company.name}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-}
-
-interface CompanyInfoProps {
-    data: {
-        country: string;
-        countryCode: string;
-        diversity: string;
-        marketCap: number;
-    };
-    theme: 'light' | 'dark';
-}
-
-function CompanyInfo({ data, theme }: CompanyInfoProps) {
-    return (
-        <div
-            className={`rounded-lg p-4 shadow-md ${
-                theme === 'dark'
-                    ? 'bg-neutral-800 text-neutral-100'
-                    : 'bg-white text-neutral-900'
-            }`}
-        >
-            <h2 className="mb-4 text-2xl font-bold">Company Information</h2>
-            <p>
-                <strong>Country:</strong> {data.country}
-            </p>
-            <p>
-                <strong>Country Code:</strong> {data.countryCode}
-            </p>
-            <p>
-                <strong>Diversity Index:</strong> {data.diversity}
-            </p>
-            <p>
-                <strong>Market Cap:</strong> ${data.marketCap.toLocaleString()}
-            </p>
-        </div>
-    );
-}
-
-interface ChartCardProps {
-    title: string;
-    data: ChartData<'line'>;
-    options: ChartOptions<'line'>;
-    lightMode: boolean;
-}
-
-function ChartCard({ title, data, options, lightMode }: ChartCardProps) {
-    return (
-        <div
-            className={`p-4 ${lightMode ? 'bg-white text-neutral-900' : 'bg-neutral-800 text-neutral-100'} rounded-lg shadow-md`}
-        >
-            <h3 className="mb-2 text-xl font-semibold">{title}</h3>
-            <Line data={data} options={options} />
-        </div>
-    );
+interface CompanyDataInterface {
+    name: string;
+    country: string;
+    countryCode: string;
+    diversity: string;
+    marketCap: number;
+    stockPrice: YearlyValue[];
+    expense: YearlyValue[];
+    revenue: YearlyValue[];
+    marketShare: YearlyValue[];
 }
 
 export default function ResponsePage() {
     const [lightMode, setLightMode] = useState(false);
-
-    const zooxoData = {
+    const [companyData, setCompanyData] = useState<CompanyDataInterface>({
         name: 'Zooxo',
         country: 'Ukraine',
         countryCode: 'UAH',
@@ -158,9 +92,9 @@ export default function ResponsePage() {
             { year: 2022, value: 65.88 },
             { year: 2023, value: 38.85 },
         ],
-    };
+    })
 
-    const years = zooxoData.stockPrice.map((item) => item.year);
+    const years = companyData.stockPrice.map((item) => item.year);
 
     const chartOptions = {
         scales: {
@@ -183,7 +117,7 @@ export default function ResponsePage() {
         datasets: [
             {
                 label: 'Stock Price',
-                data: zooxoData.stockPrice.map((item) => item.value),
+                data: companyData.stockPrice.map((item) => item.value),
                 borderColor: 'rgba(75, 192, 192, 1)',
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 fill: true,
@@ -196,7 +130,7 @@ export default function ResponsePage() {
         datasets: [
             {
                 label: 'Expense',
-                data: zooxoData.expense.map((item) => item.value),
+                data: companyData.expense.map((item) => item.value),
                 borderColor: 'rgba(255, 99, 132, 1)',
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 fill: true,
@@ -209,7 +143,7 @@ export default function ResponsePage() {
         datasets: [
             {
                 label: 'Revenue',
-                data: zooxoData.revenue.map((item) => item.value),
+                data: companyData.revenue.map((item) => item.value),
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 fill: true,
@@ -222,7 +156,7 @@ export default function ResponsePage() {
         datasets: [
             {
                 label: 'Market Share',
-                data: zooxoData.marketShare.map((item) => item.value),
+                data: companyData.marketShare.map((item) => item.value),
                 borderColor: 'rgba(153, 102, 255, 1)',
                 backgroundColor: 'rgba(153, 102, 255, 0.2)',
                 fill: true,
@@ -250,7 +184,7 @@ export default function ResponsePage() {
 
                 <div className="mb-8">
                     <CompanyInfo
-                        data={zooxoData}
+                        data={companyData}
                         theme={lightMode ? 'light' : 'dark'}
                     />
                 </div>
