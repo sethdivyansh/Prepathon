@@ -14,6 +14,7 @@ import AuthPage from './pages/auth.tsx';
 import ResponsePage from './pages/response.tsx';
 import EmailVerficationPage from './pages/emailverification.tsx';
 import ForgotPasswordPage from './pages/forgotpass.tsx';
+import LoginPage from './pages/login.tsx';
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: "/emailverify",
     element: <EmailVerficationPage/>,
+  },
+  {
+    path: "/login",
+    element: <LoginPage/>,
   },
 ]);
 

@@ -1,64 +1,155 @@
-import { useNavigate } from "react-router-dom";
+import { useState, useMemo } from "react";
 import { Button } from "../components/ui/button";
+import { Line, Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
+
+// Generate random data
+const generateRandomData = (count: number, min: number, max: number) => {
+  return Array.from({ length: count }, () => Math.floor(Math.random() * (max - min + 1) + min));
+};
+
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const lineChartData = {
+  labels: months,
+  datasets: [
+    {
+      label: 'Revenue',
+      data: generateRandomData(12, 1000, 5000),
+      borderColor: '#10B981',
+      backgroundColor: 'rgba(16, 185, 129, 0.1)',
+      borderWidth: 2,
+      fill: true,
+      tension: 0.4,
+    },
+    {
+      label: 'Expenses',
+      data: generateRandomData(12, 800, 4000),
+      borderColor: '#EF4444',
+      backgroundColor: 'rgba(239, 68, 68, 0.1)',
+      borderWidth: 2,
+      fill: true,
+      tension: 0.4,
+    }
+  ],
+};
+
+const barChartData = {
+  labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+  datasets: [
+    {
+      label: 'Sales',
+      data: generateRandomData(4, 5000, 15000),
+      backgroundColor: '#3B82F6',
+    },
+    {
+      label: 'Profit',
+      data: generateRandomData(4, 1000, 5000),
+      backgroundColor: '#10B981',
+    }
+  ],
+};
 
 export default function LandingPage() {
-    const navigate = useNavigate();
-  
-    return (
-        <div className="bg-gradient-to-r from-orange-400 via-yellow-300 to-red-400 min-h-screen">
-            <div className="py-6 px-2">
-                <div className="container mx-auto flex justify-between items-center">
-                    <div className="text-white text-3xl font-bold">INTER IIT TECH MEET 13.0</div>
-                    <div>
-                        <ul className="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0 justify-center">
-                            <li><a href="#services" className="text-white hover:underline">Services</a></li>
-                            <li><a href="#about" className="text-white hover:underline">About Us</a></li>
-                            <li><a href="#contact" className="text-white hover:underline">Contact</a></li>
-                        </ul>
-                    </div>
-                </div>
+  const [darkMode, setDarkMode] = useState(true);
+
+  const chartOptions = useMemo(() => ({
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top' as const,
+        labels: {
+          color: darkMode ? '#fff' : '#000',
+          font: {
+            size: 12,
+          },
+        },
+      },
+      tooltip: {
+        enabled: true,
+        mode: 'index' as const,
+        intersect: false,
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          color: darkMode ? '#9CA3AF' : '#4B5563',
+        },
+      },
+      y: {
+        grid: {
+          color: darkMode ? '#374151' : '#E5E7EB',
+        },
+        ticks: {
+          color: darkMode ? '#9CA3AF' : '#4B5563',
+        },
+      },
+    },
+  }), [darkMode]);
+
+  return (
+    <div className={`min-h-screen ${darkMode ? 'bg-neutral-900 text-white' : 'bg-white text-neutral-900'}`}>
+      <div className="container mx-auto px-4 py-8">
+        <header className="flex justify-between items-center mb-16">
+          <div className="text-2xl font-bold">LOGO</div>
+          <Button
+            onClick={() => setDarkMode(!darkMode)}
+            className={`px-4 py-2 rounded-md ${darkMode ? 'bg-neutral-700 text-white' : 'bg-neutral-200 text-black'}`}
+          >
+            {darkMode ? 'Enable Light Mode' : 'Enable Dark Mode'}
+          </Button>
+        </header>
+        <main className="text-center">
+          <h1 className="text-5xl font-bold mb-4">
+            Business insights,
+            <br />
+            at your fingertips.
+          </h1>
+          <p className="text-xl mb-8 text-neutral-400">
+            Engineered for Real-Time Innovation.
+          </p>
+          <Button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-md">
+            Get Started
+          </Button>
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="h-80">
+              <Line data={lineChartData} options={chartOptions} />
             </div>
-            <div className="flex flex-col items-center justify-center text-center py-20">
-                <div className="text-4xl font-bold text-white mb-4">Unlock Insights with AI-Powered Data Querying</div>
-                <div className="text-lg text-white mb-8">
-                    Our machine learning solutions empower you to gain actionable insights from vast amounts of data.
-                </div>
-                <Button className="bg-white text-orange-600 hover:bg-gray-200" onClick={() => navigate('/auth')}>
-                    Start Querying Now
-                </Button>
+            <div className="h-80">
+              <Bar data={barChartData} options={chartOptions} />
             </div>
-            <div id="services" className="py-20 bg-white">
-                <div className="container mx-auto px-3">
-                    <div className="text-3xl font-bold text-center mb-12">Our Services</div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="p-6 border rounded-lg shadow-md">
-                            <div className="text-xl font-semibold mb-4">Data Analytics</div>
-                            <div>
-                                Utilize advanced analytics to extract insights from complex datasets with ease.
-                            </div>
-                        </div>
-                        <div className="p-6 border rounded-lg shadow-md">
-                            <div className="text-xl font-semibold mb-4">Predictive Modeling</div>
-                            <div>
-                                Leverage machine learning algorithms to predict trends and make data-driven decisions.
-                            </div>
-                        </div>
-                        <div className="p-6 border rounded-lg shadow-md">
-                            <div className="text-xl font-semibold mb-4">Custom Solutions</div>
-                            <div>
-                                Get tailored solutions to meet your unique business challenges and data needs.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="contact" className="py-20 bg-gradient-to-r from-orange-400 via-yellow-300 to-red-400 text-white text-center">
-                <div className="text-3xl font-bold mb-4">Ready to Get Started?</div>
-                <div className="mb-8">Contact us today to learn more about our services and how we can help you.</div>
-                <Button className="bg-white text-orange-600 hover:bg-gray-200">
-                    Contact Us
-                </Button>
-            </div>
-        </div>
-    );
+          </div>
+        </main>
+      </div>
+    </div>
+  );
 }

@@ -1,12 +1,11 @@
-import { Line } from 'react-chartjs-2';
+import { Line, Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { useState } from 'react';
 
-// Register chart components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 interface SidebarProps {
-  lightMode: boolean; // Added prop to pass light mode
+  lightMode: boolean; 
 }
 
 function Sidebar({ lightMode }: SidebarProps) {
@@ -14,7 +13,6 @@ function Sidebar({ lightMode }: SidebarProps) {
     { name: 'Zooxo', flag: '🇺🇦' },
     { name: 'Abatz', flag: '🇵🇱' },
     { name: 'Youbridge', flag: '🇧🇷' },
-    // Add more companies as needed
   ];
 
   return (
@@ -39,7 +37,7 @@ interface CompanyInfoProps {
     diversity: string;
     marketCap: number;
   };
-  theme: 'light' | 'dark'; // Prop to toggle between light and dark modes
+  theme: 'light' | 'dark'; 
 }
 
 function CompanyInfo({ data, theme }: CompanyInfoProps) {
@@ -70,9 +68,9 @@ import { ChartData, ChartOptions } from 'chart.js';
 
 interface ChartCardProps {
   title: string;
-  data: ChartData<'line'>; // Specify 'line' chart
-  options: ChartOptions<'line'>; // Specify 'line' chart
-  lightMode: boolean; // Added prop for light mode
+  data: ChartData<'line'>; 
+  options: ChartOptions<'line'>; 
+  lightMode: boolean;
 }
 
 function ChartCard({ title, data, options, lightMode }: ChartCardProps) {
