@@ -4,6 +4,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 
+interface ChatHistoryItem {
+    title: string,
+    description: string,
+    time: string
+}
+
 export default function ChatbotPage() {
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState<string[]>([]);
@@ -15,7 +21,7 @@ export default function ChatbotPage() {
         'What companies have a Diversity greater than 50%',
     ];
 
-    const chatHistory = [
+    const [chatHistory,setChatHistory] = useState<ChatHistoryItem[]>([
         {
             title: 'Indian Companies',
             description: 'Fetched all companies based in India.',
@@ -31,7 +37,7 @@ export default function ChatbotPage() {
             description: 'Identified companies with diversity above 50%.',
             time: '1 day ago',
         },
-    ];
+    ]);
 
     const handleSendMessage = () => {
         if (input.trim()) {
@@ -56,10 +62,9 @@ export default function ChatbotPage() {
         <div className="flex min-h-screen flex-col justify-between bg-gradient-to-r from-slate-600 to-slate-950 p-6 text-white">
             <header className="flex items-center justify-between py-4">
                 <h1 className="text-3xl font-bold">{greeting}, User</h1>
-                {/* History Button positioned to the right */}
                 <Button
                     className="mt-2 bg-gray-800 text-white transition-colors duration-200 ease-in-out hover:bg-gray-700"
-                    onClick={() => navigate('/history')} // Placeholder action
+                    onClick={() => navigate('/history')} 
                 >
                     History
                 </Button>
@@ -113,7 +118,6 @@ export default function ChatbotPage() {
                 </div>
             </section>
 
-            {/* Recent Chats History */}
             <section className="mt-12">
                 <h2 className="mb-4 text-center text-xl font-semibold">
                     Your recent chats
