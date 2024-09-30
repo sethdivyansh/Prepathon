@@ -117,7 +117,7 @@ export default function ResponsePage() {
         datasets: [
             {
                 label: 'Stock Price',
-                data: zooxoData.stockPrice.map((item) => item.value),
+                data: companyData.stockPrice.map((item) => item.value),
                 borderColor: 'rgba(75, 192, 192, 1)',
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 fill: true,
