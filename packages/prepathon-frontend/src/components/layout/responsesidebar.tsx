@@ -1,13 +1,21 @@
+import { useState } from "react";
+
 interface SidebarProps {
     lightMode: boolean;
 }
 
+interface CompanyInterface {
+    name: String,
+    flag: String
+}
+
 export default function Sidebar({ lightMode }: SidebarProps) {
-    const companies = [
+
+    const [companies,setCompanies] = useState<CompanyInterface[]>([
         { name: 'Zooxo', flag: '🇺🇦' },
         { name: 'Abatz', flag: '🇵🇱' },
         { name: 'Youbridge', flag: '🇧🇷' },
-    ];
+    ])
 
     return (
         <div
