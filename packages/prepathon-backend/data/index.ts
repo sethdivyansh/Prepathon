@@ -1,13 +1,15 @@
+import data from './data.json';
+
 export type YearlyData = {
     year: number;
     value: number;
-}
+};
 
 export type SyntheticYearlyData = {
     year: number;
     value: number;
     synthetic: boolean;
-}
+};
 
 export type CompanyData = {
     sl_no: number;
@@ -24,7 +26,5 @@ export type CompanyData = {
     revenue: YearlyData[];
     market_share: YearlyData[];
 };
-
-import data from './data.json';
 
 export default data as CompanyData[];

@@ -1,9 +1,17 @@
-export default function HistoryItem({ title, description, time }: { title: string; description: string; time: string }) {
+export default function HistoryItem({
+    title,
+    description,
+    time,
+}: {
+    title: string;
+    description: string;
+    time: string;
+}) {
     return (
-        <div className="p-4 bg-gray-800 hover:bg-gray-700 transition-colors duration-200 ease-in-out rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
-        <p className="text-gray-400 text-sm">{description}</p>
-        <span className="text-gray-500 text-xs">{time}</span>
+        <div className="rounded-lg bg-gray-800 p-4 shadow-md transition-colors duration-200 ease-in-out hover:bg-gray-700">
+            <h3 className="text-lg font-semibold text-white">{title}</h3>
+            <p className="text-sm text-gray-400">{description}</p>
+            <span className="text-xs text-gray-500">{time}</span>
         </div>
     );
 }

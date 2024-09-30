@@ -1,39 +1,39 @@
-import { cn } from "@/lib/utils"
-import { ExternalLink } from "lucide-react"
+import { cn } from '@/lib/utils';
+import { ExternalLink } from 'lucide-react';
 
 interface CustomLinkProps extends React.LinkHTMLAttributes<HTMLAnchorElement> {
-  href: string
+    href: string;
 }
 
 const CustomLink = ({
-  href,
-  children,
-  className,
-  ...rest
+    href,
+    children,
+    className,
+    ...rest
 }: CustomLinkProps) => {
-  const isInternalLink = href.startsWith("/")
-  const isAnchorLink = href.startsWith("#")
+    const isInternalLink = href.startsWith('/');
+    const isAnchorLink = href.startsWith('#');
 
-  if (isInternalLink || isAnchorLink) {
+    if (isInternalLink || isAnchorLink) {
+        return (
+            <a href={href} className={className} {...rest}>
+                {children}
+            </a>
+        );
+    }
+
     return (
-      <a href={href} className={className} {...rest}>
-        {children}
-      </a>
-    )
-  }
+        <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn('items-center underline', className)}
+            {...rest}
+        >
+            {children}
+            <ExternalLink className="ml-0.5 inline-block h-4 w-4" />
+        </a>
+    );
+};
 
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={cn("items-center underline", className)}
-      {...rest}
-    >
-      {children}
-      <ExternalLink className=" ml-0.5 h-4 w-4 inline-block" />
-    </a>
-  )
-}
-
-export default CustomLink
+export default CustomLink;
