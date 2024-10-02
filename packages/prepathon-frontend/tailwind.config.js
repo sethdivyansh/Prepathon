@@ -32,6 +32,7 @@ export default {
                     foreground: 'hsl(var(--secondary-foreground))',
                 },
                 button_primary: 'hsl(var(--button-primary))',
+                button_secondary: 'hsl(var(--button-secondary))',
                 muted: {
                     DEFAULT: 'hsl(var(--muted))',
                     foreground: 'hsl(var(--muted-foreground))',

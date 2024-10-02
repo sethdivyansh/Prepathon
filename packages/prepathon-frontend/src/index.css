@@ -30,6 +30,7 @@
         --chart-5: 27 87% 67%;
         --radius: 0.5rem;
         --button-primary: 12 100% 57%;
+        --button-secondary: 0 0% 100%;
     }
     .dark {
         --background: 0 0% 7%;
@@ -38,7 +39,7 @@
         --card-foreground: 0 0% 98%;
         --popover: 240 10% 3.9%;
         --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
+        --primary: 0 0% 90%;
         --primary-foreground: 240 5.9% 10%;
         --secondary: 0 0% 51%;
         --secondary-foreground: 0 0% 98%;
@@ -57,6 +58,7 @@
         --chart-4: 280 65% 60%;
         --chart-5: 340 75% 55%;
         --button-primary: 14 89% 59%;
+        --button-secondary: 0 0% 18%;
     }
 }
 @layer base {
@@ -66,4 +68,14 @@
     body {
         @apply bg-background text-foreground;
     }
+}
+.gemini-gradient {
+    background: linear-gradient(
+        90deg,
+        #4285f4 0%,
+        #d96570e5 67%,
+        #d96570e5 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }

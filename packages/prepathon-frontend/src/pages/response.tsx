@@ -1,3 +1,7 @@
+import ChartCard from '@/components/layout/chartcard';
+import CompanyInfo from '@/components/layout/companyinforesponse';
+import Sidebar from '@/components/layout/responsesidebar';
+import { Button } from '@/components/ui/button';
 import {
     CategoryScale,
     Chart as ChartJS,
@@ -9,9 +13,6 @@ import {
     Tooltip,
 } from 'chart.js';
 import { useState } from 'react';
-import Sidebar from '@/components/layout/responsesidebar';
-import CompanyInfo from '@/components/layout/companyinforesponse';
-import ChartCard from '@/components/layout/chartcard';
 
 ChartJS.register(
     CategoryScale,
@@ -34,6 +35,20 @@ interface CompanyDataInterface {
     countryCode: string;
     diversity: string;
     marketCap: number;
+    totalCompaniesInCountry: number;
+    domesticRanking: {
+        diversityRanking: string;
+        stock: string;
+        expense: string;
+        revenue: string;
+        marketShare: string;
+    };
+    globalRanking: {
+        stock: string;
+        expense: string;
+        revenue: string;
+        marketShare: string;
+    };
     stockPrice: YearlyValue[];
     expense: YearlyValue[];
     revenue: YearlyValue[];
@@ -41,13 +56,27 @@ interface CompanyDataInterface {
 }
 
 export default function ResponsePage() {
-    const [lightMode, setLightMode] = useState(false);
+    const [lightMode, setLightMode] = useState(true);
     const [companyData, setCompanyData] = useState<CompanyDataInterface>({
         name: 'Zooxo',
         country: 'Ukraine',
         countryCode: 'UAH',
         diversity: '43.5',
         marketCap: 2340000000.0,
+        totalCompaniesInCountry: 25,
+        domesticRanking: {
+            diversityRanking: '1',
+            stock: '1',
+            expense: '1',
+            revenue: '1',
+            marketShare: '1',
+        },
+        globalRanking: {
+            stock: '1',
+            expense: '1',
+            revenue: '1',
+            marketShare: '1',
+        },
         stockPrice: [
             { year: 2015, value: 636190000 },
             { year: 2016, value: 36170000000 },
@@ -92,7 +121,7 @@ export default function ResponsePage() {
             { year: 2022, value: 65.88 },
             { year: 2023, value: 38.85 },
         ],
-    })
+    });
 
     const years = companyData.stockPrice.map((item) => item.year);
 
@@ -165,31 +194,25 @@ export default function ResponsePage() {
     };
 
     return (
-        <div
-            className={`flex ${lightMode ? 'bg-neutral-100 text-neutral-900' : 'bg-neutral-900 text-neutral-100'} min-h-screen`}
-        >
-            <Sidebar lightMode={lightMode} />
-            <div className="flex-1 p-8">
-                <header className="mb-8 flex justify-between">
-                    <h1 className="text-4xl font-bold">
-                        {companyData.name} Company Overview
-                    </h1>
-                    <button
-                        onClick={() => setLightMode(!lightMode)}
-                        className={`rounded-md p-2 ${lightMode ? 'bg-neutral-700 text-white' : 'bg-neutral-200 text-black'}`}
-                    >
-                        {lightMode ? 'Enable Dark Mode' : 'Enable Light Mode'}
-                    </button>
-                </header>
-
-                <div className="mb-8">
-                    <CompanyInfo
-                        data={companyData}
-                        theme={lightMode ? 'light' : 'dark'}
-                    />
+        <div className={`flex min-h-screen bg-background`}>
+            <Sidebar />
+            <div className="flex-1 p-2">
+                <div className="flex">
+                    <div className="w-5/6">
+                        <CompanyInfo
+                            data={companyData}
+                            // domesticRanking={}
+                            // globalRanking={}
+                        />
+                    </div>
+                    <div className="flex w-1/6 items-center justify-center">
+                        <Button className="bg-button_secondary h-12 w-36 rounded-lg text-xl shadow-box_shadow hover:bg-slate-50 dark:hover:bg-[#303030]">
+                            <span className="gemini-gradient"> Ask Gemini</span>
+                        </Button>
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                {/* <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                     <ChartCard
                         title="Stock Price"
                         data={stockPriceData}
@@ -214,7 +237,7 @@ export default function ResponsePage() {
                         options={chartOptions}
                         lightMode={lightMode}
                     />
-                </div>
+                </div> */}
             </div>
         </div>
     );

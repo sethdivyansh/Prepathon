@@ -2,6 +2,7 @@ import Navbar from '@/components/layout/navbar';
 import { SessionProvider } from '@hono/auth-js/react';
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Sidebar from './components/layout/responsesidebar';
 import AuthPage from './pages/auth';
 import ChatbotPage from './pages/chatbot';
 import EmailVerificationPage from './pages/emailverification';
@@ -26,9 +27,10 @@ const AppContent: React.FC = () => {
     return (
         <div className={isDarkMode ? 'dark' : ''}>
             <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+            {/* <Sidebar /> */}
             <div className="min-h-screen bg-white dark:bg-[#121212]">
                 <Router>
-                    <div className="mx-auto h-screen w-screen p-4">
+                    <div className="mx-auto h-screen w-screen px-4">
                         <Routes>
                             <Route
                                 path="/"
