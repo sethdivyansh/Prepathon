@@ -139,8 +139,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ isDarkMode }) => {
 
     return (
         <>
-            <div className="mt-12 flex h-full w-full flex-col items-center">
-                <div className="mb-4 flex w-full flex-col items-center bg-[url('/public/LineChart.svg')] bg-contain bg-center bg-no-repeat dark:bg-[url('/public/LineChartDark.svg')]">
+            <div className="flex h-full w-full flex-col items-center justify-center">
+                <div className="animate-bg-slide mb-4 flex w-full flex-col items-center bg-[url('/public/LineChart.svg')] bg-contain bg-center bg-no-repeat dark:bg-[url('/public/LineChartDark.svg')]">
                     <p className="text-8xl text-primary">Business insights,</p>
                     <p className="text-7xl text-primary">at your fingertips.</p>
                     <p className="mt-4 text-xl text-secondary">
