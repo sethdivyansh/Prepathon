@@ -38,7 +38,7 @@ export default function LoginPage() {
                         Don’t have an account?{' '}
                         <span
                             className="cursor-pointer text-orange-500 hover:underline"
-                            onClick={() => navigate('/register')}
+                            onClick={() => navigate('/auth')}
                         >
                             Sign up
                         </span>

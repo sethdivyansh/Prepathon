@@ -3,9 +3,6 @@ export default {
     darkMode: ['class'],
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     theme: {
-        boxShadow: {
-            box_shadow: '0px 0px 10px rgba(0,0,0,0.25)',
-        },
         extend: {
             borderRadius: {
                 lg: 'var(--radius)',
