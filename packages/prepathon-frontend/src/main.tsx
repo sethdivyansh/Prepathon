@@ -11,6 +11,7 @@ import HistoryPage from './pages/history.tsx';
 import LandingPage from './pages/landing.tsx';
 import LoginPage from './pages/login.tsx';
 import ResponsePage from './pages/response.tsx';
+import ComputationsPage from './pages/computations.tsx';
 
 const router = createBrowserRouter([
     {
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/chat',
-        element: <ChatbotPage />,
+        element: <ComputationsPage />,
     },
     {
         path: '/history',
