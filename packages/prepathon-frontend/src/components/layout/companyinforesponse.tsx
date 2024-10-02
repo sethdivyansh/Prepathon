@@ -1,30 +1,32 @@
 interface CompanyInfoProps {
     data: {
+        sl_no: number;
+        company: string;
         country: string;
-        countryCode: string;
-        diversity: string;
-        marketCap: number;
-        totalCompaniesInCountry: number;
-        domesticRanking: {
-            diversityRanking: string;
-            stock: string;
-            expense: string;
-            revenue: string;
-            marketShare: string;
+        country_code: string;
+        diversity: number;
+        market_cap: {
+            value: number;
+            synthetic: boolean;
         };
-        globalRanking: {
-            stock: string;
-            expense: string;
-            revenue: string;
-            marketShare: string;
+        total_companies_in_country: number;
+        domestic_ranking: {
+            diversity_ranking: number;
+            stock: number;
+            expense: number;
+            revenue: number;
+            market_share: number;
+        };
+        global_ranking: {
+            stock: number;
+            expense: number;
+            revenue: number;
+            market_share: number;
         };
     };
 }
 
-export default function CompanyInfo({
-    data,
-    // domesticRanking,
-}: CompanyInfoProps) {
+export default function CompanyInfo({ data }: CompanyInfoProps) {
     return (
         <div className="flex w-full flex-row gap-4 bg-background">
             <div className="w-1/3">
@@ -41,12 +43,12 @@ export default function CompanyInfo({
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <span className="text-secondary">Country Code</span>
-                            <span>{data.countryCode}</span>
+                            <span>{data.country_code}</span>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <span className="text-secondary">Market Cap</span>
-                            <span>${data.marketCap}</span>
+                            <span>${data.market_cap.value}</span>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <span className="text-secondary">
@@ -55,8 +57,8 @@ export default function CompanyInfo({
                             <span>
                                 {data.diversity}
                                 <p>
-                                    (#{data.domesticRanking.diversityRanking}/
-                                    {data.totalCompaniesInCountry} in{' '}
+                                    (#{data.domestic_ranking.diversity_ranking}/
+                                    {data.total_companies_in_country} in{' '}
                                     {data.country})
                                 </p>
                             </span>
@@ -71,25 +73,25 @@ export default function CompanyInfo({
                         <div className="grid grid-cols-2 gap-4">
                             <span className="text-secondary">Stock Price</span>
                             <span className="">
-                                #{data.domesticRanking.stock}
+                                #{data.domestic_ranking.stock}
                             </span>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <span className="text-secondary">Market Share</span>
                             <span className="">
-                                #{data.domesticRanking.stock}
+                                #{data.domestic_ranking.stock}
                             </span>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <span className="text-secondary">Revenue</span>
                             <span className="">
-                                #{data.domesticRanking.revenue}
+                                #{data.domestic_ranking.revenue}
                             </span>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <span className="text-secondary">Expense</span>
                             <span className="">
-                                #{data.domesticRanking.expense}
+                                #{data.domestic_ranking.expense}
                             </span>
                         </div>
                     </div>
@@ -101,19 +103,19 @@ export default function CompanyInfo({
                     <div className="text-sm">
                         <div className="grid grid-cols-2 gap-4">
                             <span className="text-secondary">Stock Price</span>
-                            <span>#{data.globalRanking.stock}</span>
+                            <span>#{data.global_ranking.stock}</span>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <span className="text-secondary">Market Share</span>
-                            <span>#{data.globalRanking.stock}</span>
+                            <span>#{data.global_ranking.stock}</span>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <span className="text-secondary">Revenue</span>
-                            <span>#{data.globalRanking.revenue}</span>
+                            <span>#{data.global_ranking.revenue}</span>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <span className="text-secondary">Expense</span>
-                            <span>#{data.globalRanking.expense}</span>
+                            <span>#{data.global_ranking.expense}</span>
                         </div>
                     </div>
                 </div>

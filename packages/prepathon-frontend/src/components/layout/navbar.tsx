@@ -20,7 +20,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleDarkMode, isDarkMode }) => {
     const isResponsePage = currentPath.includes('response');
     return (
         <header
-            className={`${isResponsePage ? 'sticky' : 'fixed'} left-0 top-0 w-full bg-background`}
+            className={`${isResponsePage ? 'relative' : 'fixed'} left-0 top-0 w-full bg-background`}
         >
             <div className="mx-auto flex h-16 w-full items-center justify-between px-4 sm:px-6">
                 <div className="flex h-12 w-1/6 items-center justify-between">

@@ -25,10 +25,9 @@ const AppContent: React.FC = () => {
     };
 
     return (
-        <div className={isDarkMode ? 'dark' : ''}>
+        <div className={`${isDarkMode ? 'dark' : ''} h-full`}>
             <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
-            {/* <Sidebar /> */}
-            <div className="min-h-screen bg-white dark:bg-[#121212]">
+            <div className="bg-white dark:bg-[#121212]">
                 <Router>
                     <div className="mx-auto h-screen w-screen px-4">
                         <Routes>

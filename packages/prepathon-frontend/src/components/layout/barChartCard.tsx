@@ -1,19 +1,21 @@
 import { ChartData, ChartOptions } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 
-interface ChartCardProps {
+interface BarChartProps {
     title: string;
-    data: ChartData<'line'>;
-    options: ChartOptions<'line'>;
+    ref: React.RefObject<HTMLCanvasElement>;
+    data: ChartData<'bar'>;
+    options: ChartOptions<'bar'>;
     height: number;
 }
 
-export default function ChartCard({
+export default function BarChartCard({
     title,
     data,
     options,
+    ref,
     height,
-}: ChartCardProps) {
+}: BarChartProps) {
     return (
         <div
             className={`rounded-xl bg-white p-4 shadow-box_shadow dark:bg-gradient-to-b dark:from-[#222120] dark:via-[#1A1919] dark:to-[#171717]`}
@@ -21,7 +23,7 @@ export default function ChartCard({
             <h3 className="mb-2 text-center text-xl font-semibold text-primary">
                 {title}
             </h3>
-            <Line data={data} options={options} height={height} />
+            <Bar ref={ref} data={data} options={options} height={height} />
         </div>
     );
 }
