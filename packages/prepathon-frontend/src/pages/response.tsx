@@ -8,10 +8,11 @@ import {
     Title,
     Tooltip,
 } from 'chart.js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Sidebar from '@/components/layout/responsesidebar';
 import CompanyInfo from '@/components/layout/companyinforesponse';
 import ChartCard from '@/components/layout/chartcard';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 ChartJS.register(
     CategoryScale,
@@ -23,41 +24,57 @@ ChartJS.register(
     Legend
 );
 
-interface YearlyValue {
+export type YearlyData = {
     year: number;
     value: number;
-}
+};
 
-interface CompanyDataInterface {
-    name: string;
+export type SyntheticYearlyData = {
+    year: number;
+    value: number;
+    synthetic: boolean;
+};
+
+export type CompanyData = {
+    sl_no: number;
+    company: string;
     country: string;
-    countryCode: string;
-    diversity: string;
-    marketCap: number;
-    stockPrice: YearlyValue[];
-    expense: YearlyValue[];
-    revenue: YearlyValue[];
-    marketShare: YearlyValue[];
-}
+    country_code: string;
+    diversity: number;
+    market_cap: {
+        value: number;
+        synthetic: boolean;
+    };
+    stock_price: SyntheticYearlyData[];
+    expense: YearlyData[];
+    revenue: YearlyData[];
+    market_share: YearlyData[];
+};
 
 export default function ResponsePage() {
+    const location = useLocation();
+    const navigate = useNavigate()
     const [lightMode, setLightMode] = useState(false);
-    const [companyData, setCompanyData] = useState<CompanyDataInterface>({
-        name: 'Zooxo',
+    const [companyData, setCompanyData] = useState<CompanyData>({
+        sl_no: 1,
+        company: 'Zooxo', // Fixed to match `CompanyData` type
         country: 'Ukraine',
-        countryCode: 'UAH',
-        diversity: '43.5',
-        marketCap: 2340000000.0,
-        stockPrice: [
-            { year: 2015, value: 636190000 },
-            { year: 2016, value: 36170000000 },
-            { year: 2017, value: 18615000000 },
-            { year: 2018, value: 1060000000 },
-            { year: 2019, value: 308220000 },
-            { year: 2020, value: 514130000 },
-            { year: 2021, value: 21660000 },
-            { year: 2022, value: 555700000 },
-            { year: 2023, value: 355280000 },
+        country_code: 'UAH', // Fixed to match `CompanyData` type
+        diversity: 43.5,
+        market_cap: { // Fixed to match `CompanyData` type
+            value: 2340000000.0,
+            synthetic: false,
+        },
+        stock_price: [ // Fixed to match `CompanyData` type
+            { year: 2015, value: 636190000, synthetic: false },
+            { year: 2016, value: 36170000000, synthetic: false },
+            { year: 2017, value: 18615000000, synthetic: false },
+            { year: 2018, value: 1060000000, synthetic: false },
+            { year: 2019, value: 308220000, synthetic: false },
+            { year: 2020, value: 514130000, synthetic: false },
+            { year: 2021, value: 21660000, synthetic: false },
+            { year: 2022, value: 555700000, synthetic: false },
+            { year: 2023, value: 355280000, synthetic: false },
         ],
         expense: [
             { year: 2015, value: 20101562.63 },
@@ -81,7 +98,7 @@ export default function ResponsePage() {
             { year: 2022, value: 78632245.86 },
             { year: 2023, value: 95627554.77 },
         ],
-        marketShare: [
+        market_share: [
             { year: 2015, value: 28.24 },
             { year: 2016, value: 42.01 },
             { year: 2017, value: 73.14 },
@@ -92,9 +109,40 @@ export default function ResponsePage() {
             { year: 2022, value: 65.88 },
             { year: 2023, value: 38.85 },
         ],
-    })
+    });
 
-    const years = companyData.stockPrice.map((item) => item.year);
+    useEffect(() => {
+        const fetchRawData = async () => {
+            try {
+                const params = new URLSearchParams(location.search);
+                const id = params.get('id');
+
+                if (!id) {
+                    navigate('/chat')
+                }
+                const response = await fetch(
+                    `http://localhost:5000/companies/raw-data/${id}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                );
+                if (!response.ok) {
+                    throw new Error('Failed to fetch company data');
+                }
+                const fetchedData: CompanyData = await response.json(); // Assuming API returns correct data structure
+                setCompanyData(fetchedData);
+            } catch (error) {
+                console.error('Error fetching company data:', error);
+            }
+        };
+
+        fetchRawData();
+    }, [location.search]);
+
+    const years = companyData.stock_price.map((item) => item.year); // Fixed property name
 
     const chartOptions = {
         scales: {
@@ -117,7 +165,7 @@ export default function ResponsePage() {
         datasets: [
             {
                 label: 'Stock Price',
-                data: companyData.stockPrice.map((item) => item.value),
+                data: companyData.stock_price.map((item) => item.value), // Fixed property name
                 borderColor: 'rgba(75, 192, 192, 1)',
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 fill: true,
@@ -156,7 +204,7 @@ export default function ResponsePage() {
         datasets: [
             {
                 label: 'Market Share',
-                data: companyData.marketShare.map((item) => item.value),
+                data: companyData.market_share.map((item) => item.value), // Fixed property name
                 borderColor: 'rgba(153, 102, 255, 1)',
                 backgroundColor: 'rgba(153, 102, 255, 0.2)',
                 fill: true,
@@ -172,19 +220,27 @@ export default function ResponsePage() {
             <div className="flex-1 p-8">
                 <header className="mb-8 flex justify-between">
                     <h1 className="text-4xl font-bold">
-                        {companyData.name} Company Overview
+                        {companyData.company} Company Overview {/* Fixed to use correct property */}
                     </h1>
                     <button
                         onClick={() => setLightMode(!lightMode)}
                         className={`rounded-md p-2 ${lightMode ? 'bg-neutral-700 text-white' : 'bg-neutral-200 text-black'}`}
                     >
-                        {lightMode ? 'Enable Dark Mode' : 'Enable Light Mode'}
+                        Toggle Dark/Light Mode {/* Updated button label */}
                     </button>
                 </header>
 
                 <div className="mb-8">
                     <CompanyInfo
-                        data={companyData}
+                        data={{
+                            country: companyData.country,
+                            countryCode:companyData.country_code,
+                            diversity: companyData.diversity,
+                            marketCap:{
+                                value: companyData.market_cap.value,
+                                synthetic:companyData.market_cap.synthetic
+                            }
+                        }}
                         theme={lightMode ? 'light' : 'dark'}
                     />
                 </div>

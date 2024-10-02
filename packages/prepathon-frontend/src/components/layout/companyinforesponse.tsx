@@ -2,8 +2,11 @@ interface CompanyInfoProps {
     data: {
         country: string;
         countryCode: string;
-        diversity: string;
-        marketCap: number;
+        diversity: number;  // Changed from string to number
+        marketCap: {
+            value: number;
+            synthetic: boolean;
+        };
     };
     theme: 'light' | 'dark';
 }
@@ -28,7 +31,8 @@ export default function CompanyInfo({ data, theme }: CompanyInfoProps) {
                 <strong>Diversity Index:</strong> {data.diversity}
             </p>
             <p>
-                <strong>Market Cap:</strong> ${data.marketCap.toLocaleString()}
+                <strong>Market Cap:</strong> ${data.marketCap.value.toLocaleString()}
+                {data.marketCap.synthetic && ' (Synthetic Data)'}
             </p>
         </div>
     );
