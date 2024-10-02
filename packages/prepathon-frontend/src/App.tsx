@@ -7,9 +7,8 @@ import ChatbotPage from './pages/chatbot';
 import EmailVerificationPage from './pages/emailverification';
 import ForgotPasswordPage from './pages/forgotpass';
 import LandingPage from './pages/landing';
-import LoginPage from './pages/login2';
+import LoginPage from './pages/login';
 import RegisterPage from './pages/register';
-import ResetPassword from './pages/resetPassword';
 import ResponsePage from './pages/response';
 
 // import ClientExample from './client-example';
@@ -26,9 +25,9 @@ const AppContent: React.FC = () => {
     return (
         <div className={isDarkMode ? 'dark' : ''}>
             <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
-            <div className="min-h-screen bg-white dark:bg-[#121212]">
+            <div className="h-[calc(100vh-4rem)] bg-white dark:bg-[#121212]">
                 <Router>
-                    <div className="mx-auto h-screen w-screen p-4">
+                    <div className="container mx-auto p-4">
                         <Routes>
                             <Route
                                 path="/"
@@ -45,10 +44,6 @@ const AppContent: React.FC = () => {
                             <Route
                                 path="/forgotpassword"
                                 element={<ForgotPasswordPage />}
-                            />
-                            <Route
-                                path="/resetPassword"
-                                element={<ResetPassword />}
                             />
                             <Route
                                 path="/emailverify"

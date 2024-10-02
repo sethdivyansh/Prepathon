@@ -10,7 +10,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ toggleDarkMode, isDarkMode }) => {
     return (
-        <header className="fixed left-0 top-0 w-full bg-background">
+        <header className="sticky flex justify-around bg-background">
             <div className="mx-auto flex h-16 w-full items-center justify-between px-4 sm:px-6">
                 <div className="flex items-center gap-8 space-x-2 lg:space-x-6">
                     <CustomLink href="/">
@@ -28,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleDarkMode, isDarkMode }) => {
                     </CustomLink> */}
                 </div>
                 <Button
-                    className="flex h-12 w-48 justify-around rounded-lg bg-white text-primary shadow-box_shadow hover:bg-[#F8F8F8] dark:bg-[#55555566] dark:hover:bg-[#303030]"
+                    className="shadow-box_shadow flex h-12 w-48 justify-around rounded-lg bg-white text-primary hover:bg-[#F8F8F8] dark:bg-[#55555566] dark:hover:bg-[#303030]"
                     onClick={toggleDarkMode}
                 >
                     <p>Enable Dark Mode</p>
