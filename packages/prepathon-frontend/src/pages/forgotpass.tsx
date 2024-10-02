@@ -3,33 +3,30 @@ import { Input } from '../components/ui/input';
 
 export default function ForgotPasswordPage() {
     return (
-        <div className="flex h-full items-center justify-center">
-            <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-box_shadow dark:bg-[#181818a3]">
-                <h1 className="mb-6 text-center text-3xl font-bold text-primary">
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-orange-400 via-yellow-300 to-red-400">
+            <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
+                <h1 className="mb-6 text-center text-3xl font-bold text-neutral-800">
                     Forgot Password
                 </h1>
                 <div className="space-y-4">
-                    <p className="text-center text-secondary">
-                        Enter your email address to receive an OTP.
+                    <p className="text-center text-gray-600">
+                        Enter your email address and we'll send you an OTP to
+                        verify your account.
                     </p>
                     <Input
-                        type="text"
-                        placeholder="Enter your Email"
-                        className="h-10 w-full text-secondary dark:bg-[#1F1F1F]"
+                        type="email"
+                        placeholder="Enter your email address"
+                        className="w-full"
                     />
-                    <Button className="bg-button_primary h-10 w-full text-white hover:bg-orange-500 dark:hover:bg-[#FF5126]">
-                        Send OTP
+                    <Button className="w-full bg-orange-500 text-white hover:bg-orange-600">
+                        Send Verification Email
                     </Button>
-                    <div className="mt-4 flex flex-row gap-1">
-                        <p className="text-sm text-secondary">
-                            {' '}
-                            Didn't receive an OTP?
-                        </p>
+                    <div className="mt-4 text-center">
                         <a
-                            href="#resend-otp"
-                            className="text-button_primary text-sm hover:underline"
+                            href="/auth"
+                            className="text-sm text-orange-500 hover:underline"
                         >
-                            Resend
+                            Back to Login
                         </a>
                     </div>
                 </div>
