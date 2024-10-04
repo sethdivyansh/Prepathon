@@ -4,6 +4,7 @@ import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import AuthPage from './pages/auth';
 import ChatbotPage from './pages/chatbot';
+import ComputationsPage from './pages/computations';
 import EmailVerificationPage from './pages/emailverification';
 import ForgotPasswordPage from './pages/forgotpass';
 import HistoryPage from './pages/history';
@@ -25,11 +26,14 @@ const AppContent: React.FC = () => {
     };
 
     return (
-        <div className={`${isDarkMode ? 'dark' : ''} h-full`}>
-            <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
-            <div className="bg-white dark:bg-[#121212]">
+        <div className={`${isDarkMode ? 'dark' : ''} min-h-full`}>
+            <div className="min-h-screen bg-white dark:bg-[#121212]">
                 <Router>
-                    <div className="mx-auto h-screen w-screen px-4">
+                    <Navbar
+                        isDarkMode={isDarkMode}
+                        toggleDarkMode={toggleDarkMode}
+                    />
+                    <div className="mx-auto px-4">
                         <Routes>
                             <Route
                                 path="/"
@@ -37,9 +41,13 @@ const AppContent: React.FC = () => {
                                     <LandingPage isDarkMode={isDarkMode} />
                                 }
                             />
-                            <Route path="/chat" element={<ChatbotPage />} />
+                            <Route path="/chatbot" element={<ChatbotPage />} />
+                            <Route
+                                path="/computation"
+                                element={<ComputationsPage />}
+                            />
                             <Route path="/history" element={<HistoryPage />} />
-                            <Route path="/auth" element={<AuthPage />} />
+                            <Route path="/auth" element={<RegisterPage />} />
                             <Route
                                 path="/response"
                                 element={<ResponsePage />}

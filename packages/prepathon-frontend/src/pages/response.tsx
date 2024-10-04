@@ -1,4 +1,3 @@
-import BarChartCard from '@/components/layout/barChartCard';
 import ChartCard from '@/components/layout/chartcard';
 import CompanyInfo from '@/components/layout/companyinforesponse';
 import Sidebar from '@/components/layout/responsesidebar';
@@ -16,6 +15,7 @@ import {
     Tooltip,
 } from 'chart.js';
 import { useEffect, useRef, useState } from 'react';
+import { Bar } from 'react-chartjs-2';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 ChartJS.register(
@@ -49,20 +49,20 @@ export type CompanyData = {
         value: number;
         synthetic: boolean;
     };
-    total_companies_in_country: number;
-    domestic_ranking: {
-        diversity_ranking: number;
-        stock: number;
-        expense: number;
-        revenue: number;
-        market_share: number;
-    };
-    global_ranking: {
-        stock: number;
-        expense: number;
-        revenue: number;
-        market_share: number;
-    };
+    // total_companies_in_country: number;
+    // domestic_ranking: {
+    //     diversity_ranking: number;
+    //     stock: number;
+    //     expense: number;
+    //     revenue: number;
+    //     market_share: number;
+    // };
+    // global_ranking: {
+    //     stock: number;
+    //     expense: number;
+    //     revenue: number;
+    //     market_share: number;
+    // };
     stock_price: SyntheticYearlyData[];
     expense: YearlyData[];
     revenue: YearlyData[];
@@ -87,20 +87,20 @@ export default function ResponsePage() {
             value: 2340000000.0,
             synthetic: false,
         },
-        total_companies_in_country: 25,
-        domestic_ranking: {
-            diversity_ranking: 1,
-            stock: 1,
-            expense: 1,
-            revenue: 1,
-            market_share: 1,
-        },
-        global_ranking: {
-            stock: 1,
-            expense: 1,
-            revenue: 1,
-            market_share: 1,
-        },
+        // total_companies_in_country: 25,
+        // domestic_ranking: {
+        //     diversity_ranking: 1,
+        //     stock: 1,
+        //     expense: 1,
+        //     revenue: 1,
+        //     market_share: 1,
+        // },
+        // global_ranking: {
+        //     stock: 1,
+        //     expense: 1,
+        //     revenue: 1,
+        //     market_share: 1,
+        // },
         stock_price: [
             // Fixed to match `CompanyData` type
             { year: 2015, value: 636190000, synthetic: false },
@@ -154,9 +154,9 @@ export default function ResponsePage() {
                 const params = new URLSearchParams(location.search);
                 const id = params.get('id');
 
-                if (!id) {
-                    navigate('/chat');
-                }
+                // if (!id) {
+                //     navigate('/chat');
+                // }
                 const response = await fetch(
                     `http://localhost:5000/companies/raw-data/${id}`,
                     {
@@ -455,20 +455,29 @@ export default function ResponsePage() {
                         <CompanyInfo data={companyData} />
                     </div>
                     <div className="flex w-1/6 items-center justify-center">
-                        <Button className="bg-button_secondary shadow-box_shadow h-12 w-36 rounded-lg text-xl hover:bg-slate-50 dark:hover:bg-[#303030]">
+                        <Button
+                            onClick={() => navigate('/chatbot')}
+                            className="bg-button_secondary shadow-box_shadow h-12 w-36 rounded-lg text-xl hover:bg-slate-50 dark:hover:bg-[#303030]"
+                        >
                             <span className="gemini-gradient"> Ask Gemini</span>
                         </Button>
                     </div>
                 </div>
                 <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
-                        <BarChartCard
-                            title="Market Share"
-                            ref={barRef}
-                            data={marketShareData}
-                            options={barChartOptions}
-                            height={100}
-                        />
+                        <div
+                            className={`shadow-box_shadow rounded-xl bg-white p-4 dark:bg-gradient-to-b dark:from-[#222120] dark:via-[#1A1919] dark:to-[#171717]`}
+                        >
+                            <h3 className="mb-2 text-center text-xl font-semibold text-primary">
+                                Market Share
+                            </h3>
+                            <Bar
+                                ref={barRef}
+                                data={marketShareData}
+                                options={barChartOptions}
+                                height={100}
+                            />
+                        </div>
                     </div>
                     <div>
                         <ChartCard

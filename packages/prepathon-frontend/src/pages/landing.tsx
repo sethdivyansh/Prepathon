@@ -149,7 +149,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ isDarkMode }) => {
                 </div>
                 <Button
                     className="h-10 w-24 bg-[#00A874] text-white hover:bg-[#009164] dark:bg-[#1B906C] dark:hover:bg-[#00A874]"
-                    onClick={() => navigate('/register')}
+                    onClick={() => navigate('/login')}
                 >
                     Get Started
                 </Button>

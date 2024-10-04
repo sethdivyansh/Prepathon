@@ -4,6 +4,8 @@ import CustomLink from '@/components/ui/custom-link';
 import { useSession } from '@hono/auth-js/react';
 import { format } from 'date-fns';
 import { Moon, Sun } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 interface NavbarProps {
     toggleDarkMode: () => void;
@@ -12,16 +14,23 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ toggleDarkMode, isDarkMode }) => {
     const { data: session } = useSession();
-    const comapanyName = 'Zooxo';
     const today = new Date();
     const formattedDate = format(today, 'EEEE, MMMM dd, yyyy');
-    const currentPath = window.location.pathname;
+    const location = useLocation();
+    // const companyNameRef = useRef('');
+    const isResponsePage = location.pathname.includes('response');
 
-    const isResponsePage = currentPath.includes('response');
+    const [companyName, setCompanyName] = useState('');
+
+    useEffect(() => {
+        if (isResponsePage) {
+            const params = new URLSearchParams(location.search);
+            setCompanyName(params.get('company') || '');
+        }
+    }, [isResponsePage, location.search]);
+
     return (
-        <header
-            className={`${isResponsePage ? 'relative' : 'fixed'} left-0 top-0 w-full bg-background`}
-        >
+        <header className={`relative left-0 top-0 w-full bg-background`}>
             <div className="mx-auto flex h-16 w-full items-center justify-between px-4 sm:px-6">
                 <div className="flex h-12 w-1/6 items-center justify-between">
                     <CustomLink href="/">
@@ -39,14 +48,14 @@ const Navbar: React.FC<NavbarProps> = ({ toggleDarkMode, isDarkMode }) => {
                     </CustomLink> */}
 
                     {/* User Profile Pic */}
-                    {!session?.user && (
+                    {session?.user && (
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-xl text-primary">
                             D
                         </div>
                     )}
                 </div>
                 <div className="flex h-12 w-4/5 items-center justify-between">
-                    {!session?.user && (
+                    {session?.user && (
                         <div className="flex flex-col">
                             <p className="font-semibold text-primary">
                                 Hey, Divyansh
@@ -56,9 +65,13 @@ const Navbar: React.FC<NavbarProps> = ({ toggleDarkMode, isDarkMode }) => {
                             </p>
                         </div>
                     )}
-                    <p className="text-3xl font-bold text-primary">
-                        {comapanyName} Company Overview
-                    </p>
+                    {isResponsePage ? (
+                        <p className="text-3xl font-bold text-primary">
+                            {companyName} Company Overview
+                        </p>
+                    ) : (
+                        <p></p>
+                    )}
                     <Button
                         className="shadow-box_shadow flex h-12 w-48 justify-around rounded-lg bg-white text-primary hover:bg-[#F8F8F8] dark:bg-[#55555566] dark:hover:bg-[#303030]"
                         onClick={toggleDarkMode}

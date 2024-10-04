@@ -9,20 +9,20 @@ interface CompanyInfoProps {
             value: number;
             synthetic: boolean;
         };
-        total_companies_in_country: number;
-        domestic_ranking: {
-            diversity_ranking: number;
-            stock: number;
-            expense: number;
-            revenue: number;
-            market_share: number;
-        };
-        global_ranking: {
-            stock: number;
-            expense: number;
-            revenue: number;
-            market_share: number;
-        };
+        // total_companies_in_country: number;
+        // domestic_ranking: {
+        //     diversity_ranking: number;
+        //     stock: number;
+        //     expense: number;
+        //     revenue: number;
+        //     market_share: number;
+        // };
+        // global_ranking: {
+        //     stock: number;
+        //     expense: number;
+        //     revenue: number;
+        //     market_share: number;
+        // };
     };
 }
 
@@ -36,10 +36,8 @@ export default function CompanyInfo({ data }: CompanyInfoProps) {
                     </h2>
                     <div className="text-sm">
                         <div className="grid grid-cols-2 gap-4">
-                            <span className="text-secondary">
-                                {data.country}
-                            </span>
-                            <span>Ukraine</span>
+                            <span className="text-secondary">Country</span>
+                            <span>{data.country}</span>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <span className="text-secondary">Country Code</span>
@@ -56,17 +54,17 @@ export default function CompanyInfo({ data }: CompanyInfoProps) {
                             </span>
                             <span>
                                 {data.diversity}
-                                <p>
+                                {/* <p>
                                     (#{data.domestic_ranking.diversity_ranking}/
                                     {data.total_companies_in_country} in{' '}
                                     {data.country})
-                                </p>
+                                </p> */}
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="w-1/3">
+            {/* <div className="w-1/3">
                 <div className="w-full rounded-lg text-primary">
                     <h2 className="mb-1 text-xl font-bold">Domestic Ranking</h2>
                     <div className="text-sm">
@@ -119,7 +117,7 @@ export default function CompanyInfo({ data }: CompanyInfoProps) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }

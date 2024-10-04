@@ -15,7 +15,7 @@ export default function ForgotPasswordPage() {
                     <Input
                         type="text"
                         placeholder="Enter your Email"
-                        className="h-10 w-full text-secondary dark:bg-[#1F1F1F]"
+                        className="h-10 w-full text-primary dark:bg-[#1F1F1F]"
                     />
                     <Button className="bg-button_primary h-10 w-full text-white hover:bg-[#ff6b3d] dark:hover:bg-[#FF5126]">
                         Send OTP
