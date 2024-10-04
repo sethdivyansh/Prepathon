@@ -1,31 +1,40 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { Input } from '../ui/input';
 
-interface SidebarProps {
-    lightMode: boolean;
-}
+// interface SidebarProps {
+//     lightMode: boolean;
+// }
 
 interface CompanyInterface {
-    name: string,
-    flag: string
+    name: string;
+    flag: string;
 }
 
-export default function Sidebar({ lightMode }: SidebarProps) {
-
-    const [companies,setCompanies] = useState<CompanyInterface[]>([
+// export default function Sidebar({ lightMode }: SidebarProps) {
+export default function Sidebar() {
+    const [companies, setCompanies] = useState<CompanyInterface[]>([
         { name: 'Zooxo', flag: '🇺🇦' },
         { name: 'Abatz', flag: '🇵🇱' },
         { name: 'Youbridge', flag: '🇧🇷' },
-    ])
+    ]);
 
     return (
-        <div
-            className={`w-1/4 p-4 ${lightMode ? 'bg-neutral-200 text-neutral-900' : 'bg-neutral-800 text-neutral-100'} h-full`}
-        >
-            <h3 className="mb-4 text-lg font-bold">Recently Searched</h3>
+        <div className={`mt-1 h-screen w-1/5 bg-background`}>
+            <Input
+                type="text"
+                placeholder="Search"
+                className="h-9 w-5/6 rounded-lg bg-white p-2 text-primary placeholder:text-secondary dark:bg-[#1F1F1F]"
+            />
+            <h3 className="my-2 ml-2 font-light text-black dark:text-secondary">
+                Recently Searched
+            </h3>
             <ul>
                 {companies.map((company, index) => (
-                    <li key={index} className="mb-2 flex items-center">
-                        <span className="mr-2">{company.flag}</span>
+                    <li
+                        key={index}
+                        className="mb-2 ml-2 flex items-center font-medium text-primary"
+                    >
+                        <span className="mr-5">{company.flag}</span>
                         {company.name}
                     </li>
                 ))}

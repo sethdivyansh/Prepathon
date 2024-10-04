@@ -1,17 +1,21 @@
+import BarChartCard from '@/components/layout/barChartCard';
+import ChartCard from '@/components/layout/chartcard';
+import CompanyInfo from '@/components/layout/companyinforesponse';
+import Sidebar from '@/components/layout/responsesidebar';
+import { Button } from '@/components/ui/button';
 import {
     CategoryScale,
+    ChartArea,
     Chart as ChartJS,
     Legend,
     LinearScale,
     LineElement,
     PointElement,
+    ScriptableContext,
     Title,
     Tooltip,
 } from 'chart.js';
-import { useEffect, useState } from 'react';
-import Sidebar from '@/components/layout/responsesidebar';
-import CompanyInfo from '@/components/layout/companyinforesponse';
-import ChartCard from '@/components/layout/chartcard';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 ChartJS.register(
@@ -45,6 +49,20 @@ export type CompanyData = {
         value: number;
         synthetic: boolean;
     };
+    total_companies_in_country: number;
+    domestic_ranking: {
+        diversity_ranking: number;
+        stock: number;
+        expense: number;
+        revenue: number;
+        market_share: number;
+    };
+    global_ranking: {
+        stock: number;
+        expense: number;
+        revenue: number;
+        market_share: number;
+    };
     stock_price: SyntheticYearlyData[];
     expense: YearlyData[];
     revenue: YearlyData[];
@@ -53,19 +71,38 @@ export type CompanyData = {
 
 export default function ResponsePage() {
     const location = useLocation();
-    const navigate = useNavigate()
-    const [lightMode, setLightMode] = useState(false);
+    const navigate = useNavigate();
+    const barRef = useRef(null);
+    const theme = localStorage.getItem('theme') || 'light';
+    const [darkMode, setdarkMode] = useState(theme === 'dark');
+
     const [companyData, setCompanyData] = useState<CompanyData>({
         sl_no: 1,
-        company: 'Zooxo', // Fixed to match `CompanyData` type
+        company: 'Zooxo',
         country: 'Ukraine',
-        country_code: 'UAH', // Fixed to match `CompanyData` type
+        country_code: 'UAH',
         diversity: 43.5,
-        market_cap: { // Fixed to match `CompanyData` type
+        market_cap: {
+            // Fixed to match `CompanyData` type
             value: 2340000000.0,
             synthetic: false,
         },
-        stock_price: [ // Fixed to match `CompanyData` type
+        total_companies_in_country: 25,
+        domestic_ranking: {
+            diversity_ranking: 1,
+            stock: 1,
+            expense: 1,
+            revenue: 1,
+            market_share: 1,
+        },
+        global_ranking: {
+            stock: 1,
+            expense: 1,
+            revenue: 1,
+            market_share: 1,
+        },
+        stock_price: [
+            // Fixed to match `CompanyData` type
             { year: 2015, value: 636190000, synthetic: false },
             { year: 2016, value: 36170000000, synthetic: false },
             { year: 2017, value: 18615000000, synthetic: false },
@@ -118,7 +155,7 @@ export default function ResponsePage() {
                 const id = params.get('id');
 
                 if (!id) {
-                    navigate('/chat')
+                    navigate('/chat');
                 }
                 const response = await fetch(
                     `http://localhost:5000/companies/raw-data/${id}`,
@@ -140,22 +177,120 @@ export default function ResponsePage() {
         };
 
         fetchRawData();
-    }, [location.search]);
+    }, [location.search, navigate]);
 
     const years = companyData.stock_price.map((item) => item.year); // Fixed property name
 
-    const chartOptions = {
+    useEffect(() => {
+        setdarkMode(theme === 'dark');
+        console.log('darkMode', darkMode);
+    }, [darkMode, theme]);
+
+    const barChartOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
         scales: {
             x: {
-                ticks: { color: lightMode ? '#000000' : '#FFFFFF' },
+                ticks: { color: '#828282' },
+                grid: {
+                    display: false,
+                },
             },
             y: {
-                ticks: { color: lightMode ? '#000000' : '#FFFFFF' },
+                ticks: { color: '#828282' },
+                grid: {
+                    display: false,
+                },
             },
         },
         plugins: {
             legend: {
-                labels: { color: lightMode ? '#000000' : '#FFFFFF' },
+                display: false,
+                position: 'top' as const,
+                labels: {
+                    font: {
+                        size: 12,
+                    },
+                },
+            },
+            tooltip: {
+                enabled: true,
+                mode: 'index' as const,
+                intersect: true,
+            },
+        },
+    };
+
+    const stockChartOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+            x: {
+                ticks: { color: '#828282' },
+                grid: {
+                    display: false,
+                },
+            },
+            y: {
+                border: { dash: [2, 2] },
+                ticks: { color: '#828282' },
+                grid: {
+                    display: true,
+                    color: darkMode ? '#2D2D2D' : '#E5E7EB',
+                },
+            },
+        },
+        plugins: {
+            legend: {
+                display: false,
+                position: 'top' as const,
+                labels: {
+                    font: {
+                        size: 12,
+                    },
+                },
+            },
+            tooltip: {
+                enabled: true,
+                mode: 'index' as const,
+                intersect: false,
+            },
+        },
+    };
+
+    const spendActivityOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+            x: {
+                ticks: { color: '#828282' },
+                grid: {
+                    display: false,
+                },
+            },
+            y: {
+                border: { dash: [2, 2] },
+                ticks: { color: '#828282' },
+                grid: {
+                    display: true,
+                    color: darkMode ? '#2D2D2D' : '#E5E7EB',
+                },
+            },
+        },
+        plugins: {
+            legend: {
+                display: false,
+                position: 'top' as const,
+                labels: {
+                    font: {
+                        size: 12,
+                    },
+                },
+            },
+            tooltip: {
+                enabled: true,
+                mode: 'index' as const,
+                intersect: false,
             },
         },
     };
@@ -166,35 +301,58 @@ export default function ResponsePage() {
             {
                 label: 'Stock Price',
                 data: companyData.stock_price.map((item) => item.value), // Fixed property name
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: (() => {
+                    if (
+                        companyData.stock_price[
+                            companyData.stock_price.length - 1
+                        ].value > companyData.stock_price[0].value
+                    ) {
+                        return darkMode ? '#00D693' : '#10B981';
+                    } else {
+                        return darkMode ? '#993030' : '#EF4444';
+                    }
+                })(),
+                backgroundColor: (() => {
+                    if (
+                        companyData.stock_price[
+                            companyData.stock_price.length - 1
+                        ].value > companyData.stock_price[0].value
+                    ) {
+                        return darkMode
+                            ? 'rgba(0, 214, 147, 0.1)'
+                            : 'rgba(16, 185, 129, 0.1)';
+                    } else {
+                        return darkMode
+                            ? 'rgba(153, 48, 48, 0.1)'
+                            : 'rgba(239, 68, 68, 0.1)';
+                    }
+                })(),
+                borderWidth: 2,
                 fill: true,
+                tension: 0.4,
             },
         ],
     };
 
-    const expenseData = {
+    const spendActivityData = {
         labels: years,
         datasets: [
             {
                 label: 'Expense',
                 data: companyData.expense.map((item) => item.value),
-                borderColor: 'rgba(255, 99, 132, 1)',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                fill: true,
-            },
-        ],
-    };
+                borderColor: 'rgba(244, 98, 94, 1)',
+                backgroundColor: 'rgba(244, 98, 94, 0.2)',
 
-    const revenueData = {
-        labels: years,
-        datasets: [
+                fill: false,
+                borderWidth: 1,
+            },
             {
                 label: 'Revenue',
                 data: companyData.revenue.map((item) => item.value),
-                borderColor: 'rgba(54, 162, 235, 1)',
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                fill: true,
+                borderColor: 'rgba(0, 210, 190, 1)',
+                backgroundColor: '#009164',
+                fill: false,
+                borderWidth: 1,
             },
         ],
     };
@@ -204,72 +362,130 @@ export default function ResponsePage() {
         datasets: [
             {
                 label: 'Market Share',
-                data: companyData.market_share.map((item) => item.value), // Fixed property name
-                borderColor: 'rgba(153, 102, 255, 1)',
-                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                fill: true,
+                data: companyData.market_share.map((item) => item.value),
+                backgroundColor: function (context: ScriptableContext<'bar'>) {
+                    const chart = context.chart;
+                    const {
+                        ctx,
+                        chartArea,
+                    }: { ctx: CanvasRenderingContext2D; chartArea: ChartArea } =
+                        chart;
+
+                    // Fallback color in case chartArea is not available
+                    if (!chartArea) {
+                        return darkMode ? '#2D2D2F' : '#FF3300';
+                    }
+
+                    const gradient = ctx.createLinearGradient(
+                        chartArea.left,
+                        chartArea.bottom,
+                        chartArea.left,
+                        chartArea.top
+                    );
+
+                    if (darkMode) {
+                        gradient.addColorStop(0, '#1F1F20');
+                        gradient.addColorStop(0.5, '#2D2D2F');
+                        gradient.addColorStop(1, '#2D2D2F');
+
+                        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                        ctx.shadowBlur = 10;
+                        ctx.shadowOffsetX = 0;
+                        ctx.shadowOffsetY = 4;
+                    } else {
+                        ctx.shadowColor = 'rgba(0, 0, 0, 0)';
+                        ctx.shadowBlur = 0;
+                        ctx.shadowOffsetX = 0;
+                        ctx.shadowOffsetY = 0;
+                        gradient.addColorStop(1, '#FF3300');
+                        gradient.addColorStop(0, '#FF653F');
+                    }
+
+                    ctx.fillStyle = gradient;
+
+                    return gradient;
+                },
+                hoverBackgroundColor: function (
+                    context: ScriptableContext<'bar'>
+                ) {
+                    const chart = context.chart;
+                    const {
+                        ctx,
+                        chartArea,
+                    }: { ctx: CanvasRenderingContext2D; chartArea: ChartArea } =
+                        chart;
+
+                    // Fallback hover color in case chartArea is not available
+                    if (!chartArea) {
+                        return darkMode ? '#F24A21' : '#4B4B4B';
+                    }
+
+                    const hoverGradient = ctx.createLinearGradient(
+                        chartArea.left,
+                        chartArea.bottom,
+                        chartArea.left,
+                        chartArea.top
+                    );
+
+                    if (darkMode) {
+                        hoverGradient.addColorStop(0, '#BD6955');
+                        hoverGradient.addColorStop(1, '#F24A21');
+                    } else {
+                        hoverGradient.addColorStop(1, '#2D2D2D');
+                        hoverGradient.addColorStop(0, '#4B4B4B');
+                    }
+
+                    return hoverGradient;
+                },
+                borderRadius: {
+                    topLeft: 4,
+                    topRight: 4,
+                },
+                borderSkipped: false,
             },
         ],
     };
 
     return (
-        <div
-            className={`flex ${lightMode ? 'bg-neutral-100 text-neutral-900' : 'bg-neutral-900 text-neutral-100'} min-h-screen`}
-        >
-            <Sidebar lightMode={lightMode} />
-            <div className="flex-1 p-8">
-                <header className="mb-8 flex justify-between">
-                    <h1 className="text-4xl font-bold">
-                        {companyData.company} Company Overview {/* Fixed to use correct property */}
-                    </h1>
-                    <button
-                        onClick={() => setLightMode(!lightMode)}
-                        className={`rounded-md p-2 ${lightMode ? 'bg-neutral-700 text-white' : 'bg-neutral-200 text-black'}`}
-                    >
-                        Toggle Dark/Light Mode {/* Updated button label */}
-                    </button>
-                </header>
-
-                <div className="mb-8">
-                    <CompanyInfo
-                        data={{
-                            country: companyData.country,
-                            countryCode:companyData.country_code,
-                            diversity: companyData.diversity,
-                            marketCap:{
-                                value: companyData.market_cap.value,
-                                synthetic:companyData.market_cap.synthetic
-                            }
-                        }}
-                        theme={lightMode ? 'light' : 'dark'}
-                    />
+        <div className={`flex min-h-full bg-background`}>
+            <Sidebar />
+            <div className="flex-1 p-2">
+                <div className="flex">
+                    <div className="w-5/6">
+                        <CompanyInfo data={companyData} />
+                    </div>
+                    <div className="flex w-1/6 items-center justify-center">
+                        <Button className="bg-button_secondary shadow-box_shadow h-12 w-36 rounded-lg text-xl hover:bg-slate-50 dark:hover:bg-[#303030]">
+                            <span className="gemini-gradient"> Ask Gemini</span>
+                        </Button>
+                    </div>
                 </div>
-
-                <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-                    <ChartCard
-                        title="Stock Price"
-                        data={stockPriceData}
-                        options={chartOptions}
-                        lightMode={lightMode}
-                    />
-                    <ChartCard
-                        title="Expense"
-                        data={expenseData}
-                        options={chartOptions}
-                        lightMode={lightMode}
-                    />
-                    <ChartCard
-                        title="Revenue"
-                        data={revenueData}
-                        options={chartOptions}
-                        lightMode={lightMode}
-                    />
-                    <ChartCard
-                        title="Market Share"
-                        data={marketShareData}
-                        options={chartOptions}
-                        lightMode={lightMode}
-                    />
+                <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div>
+                        <BarChartCard
+                            title="Market Share"
+                            ref={barRef}
+                            data={marketShareData}
+                            options={barChartOptions}
+                            height={100}
+                        />
+                    </div>
+                    <div>
+                        <ChartCard
+                            title="Stock Price"
+                            data={stockPriceData}
+                            options={stockChartOptions}
+                            height={100}
+                        />
+                    </div>
+                    <div className="col-span-2 h-1/3 w-full">
+                        <ChartCard
+                            title="Spend Activity"
+                            data={spendActivityData}
+                            options={spendActivityOptions}
+                            height={60}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

@@ -3,6 +3,9 @@ export default {
     darkMode: ['class'],
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     theme: {
+        boxShadow: {
+            box_shadow: '0px 0px 10px rgba(0,0,0,0.25)',
+        },
         extend: {
             borderRadius: {
                 lg: 'var(--radius)',
@@ -28,6 +31,8 @@ export default {
                     DEFAULT: 'hsl(var(--secondary))',
                     foreground: 'hsl(var(--secondary-foreground))',
                 },
+                button_primary: 'hsl(var(--button-primary))',
+                button_secondary: 'hsl(var(--button-secondary))',
                 muted: {
                     DEFAULT: 'hsl(var(--muted))',
                     foreground: 'hsl(var(--muted-foreground))',

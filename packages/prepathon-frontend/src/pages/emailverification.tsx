@@ -3,29 +3,33 @@ import { Input } from '../components/ui/input';
 
 export default function EmailVerificationPage() {
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">
-            <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
-                <h1 className="mb-6 text-center text-3xl font-bold text-neutral-800">
+        <div className="flex h-full items-center justify-center">
+            <div className="shadow-box_shadow w-full max-w-md rounded-lg bg-white p-8 dark:bg-[#181818a3]">
+                <h1 className="mb-6 text-center text-3xl font-bold text-primary">
                     Email Verification
                 </h1>
                 <div className="space-y-4">
-                    <p className="text-center text-gray-600">
+                    <p className="text-center text-secondary">
                         Enter the OTP that has been sent to your email address.
                     </p>
                     <Input
                         type="text"
                         placeholder="Enter your OTP"
-                        className="w-full"
+                        className="h-10 w-full text-secondary dark:bg-[#1F1F1F]"
                     />
-                    <Button className="w-full bg-indigo-500 text-white hover:bg-indigo-600">
+                    <Button className="bg-button_primary h-10 w-full text-white hover:bg-orange-500 dark:hover:bg-[#FF5126]">
                         Verify OTP
                     </Button>
-                    <div className="mt-4 text-center">
+                    <div className="mt-4 flex flex-row gap-1">
+                        <p className="text-sm text-secondary">
+                            {' '}
+                            Didn't receive an OTP?
+                        </p>
                         <a
                             href="#resend-otp"
-                            className="text-sm text-indigo-500 hover:underline"
+                            className="text-button_primary text-sm hover:underline"
                         >
-                            Didn't receive an OTP? Resend
+                            Resend
                         </a>
                     </div>
                 </div>
