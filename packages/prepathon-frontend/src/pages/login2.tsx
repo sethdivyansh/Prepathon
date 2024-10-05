@@ -11,11 +11,15 @@ export default function LoginPage() {
     const navigate = useNavigate();
     const theme = localStorage.getItem('theme') || 'light';
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('Email: ', email);
         console.log('Password: ', password);
-        navigate('/computation');
+        try {
+            signIn('credentials', { email, password });
+        } catch (error) {
+            console.error('Login failed', error);
+        }
     };
 
     useEffect(() => {

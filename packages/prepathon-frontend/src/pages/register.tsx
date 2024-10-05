@@ -7,16 +7,28 @@ import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
     const [email, setEmail] = React.useState('');
+    const [name, setName] = React.useState('');
     const [password, setPassword] = React.useState('');
     const navigate = useNavigate();
     const theme = localStorage.getItem('theme') || 'light';
     const { data: session } = useSession();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Email: ', email);
-        console.log('Password: ', password);
-        navigate('/computation');
+
+        const response = await fetch('/api/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, email, password }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Signup failed');
+        }
+
+        signIn('credentials', { email, password });
     };
 
     useEffect(() => {
@@ -43,6 +55,12 @@ const RegisterPage = () => {
                                 Login
                             </span>
                         </p>
+                        <Input
+                            className="text-bold h-12 rounded-lg border-none leading-[13px] text-primary shadow-[0px_0px_10px_rgba(0,0,0,0.25)] dark:bg-[#1F1F1F] md:h-12"
+                            placeholder="Name"
+                            type="text"
+                            onChange={(e) => setName(e.target.value)}
+                        />
                         <Input
                             className="text-bold h-12 rounded-lg border-none leading-[13px] text-primary shadow-[0px_0px_10px_rgba(0,0,0,0.25)] dark:bg-[#1F1F1F] md:h-12"
                             placeholder="Email"
