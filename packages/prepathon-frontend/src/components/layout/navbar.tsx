@@ -1,6 +1,6 @@
-// import UserButton from '@/components/ui/user-button';
 import { Button } from '@/components/ui/button';
 import CustomLink from '@/components/ui/custom-link';
+import UserButton from '@/components/ui/user-button';
 import { useSession } from '@hono/auth-js/react';
 import { format } from 'date-fns';
 import { Moon, Sun } from 'lucide-react';
@@ -17,7 +17,6 @@ const Navbar: React.FC<NavbarProps> = ({ toggleDarkMode, isDarkMode }) => {
     const today = new Date();
     const formattedDate = format(today, 'EEEE, MMMM dd, yyyy');
     const location = useLocation();
-    // const companyNameRef = useRef('');
     const isResponsePage = location.pathname.includes('response');
 
     const [companyName, setCompanyName] = useState('');
@@ -48,17 +47,13 @@ const Navbar: React.FC<NavbarProps> = ({ toggleDarkMode, isDarkMode }) => {
                     </CustomLink> */}
 
                     {/* User Profile Pic */}
-                    {session?.user && (
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-xl text-primary">
-                            D
-                        </div>
-                    )}
+                    {session?.user && <UserButton />}
                 </div>
                 <div className="flex h-12 w-4/5 items-center justify-between">
                     {session?.user && (
                         <div className="flex flex-col">
                             <p className="font-semibold text-primary">
-                                Hey, Divyansh
+                                Hey, {session.user.name?.split(' ')[0]}
                             </p>
                             <p className="text-[0.6rem] font-semibold text-secondary">
                                 {formattedDate}

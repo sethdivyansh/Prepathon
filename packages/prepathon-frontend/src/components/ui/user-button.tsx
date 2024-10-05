@@ -5,13 +5,16 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { signIn, signOut, useSession } from '@hono/auth-js/react';
 import { LogInIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserButton() {
     const { data: session } = useSession();
+    const navigate = useNavigate();
 
     return (
         <>
@@ -28,18 +31,18 @@ export default function UserButton() {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button
-                            variant="ghost"
-                            className="relative h-8 w-8 rounded-full"
+                            variant={'ghost'}
+                            className="relative h-10 w-10 rounded-full"
                         >
-                            <Avatar className="h-8 w-8">
+                            <Avatar className="h-10 w-10">
                                 {session.user?.image && (
                                     <AvatarImage
                                         src={session.user.image}
                                         alt={session.user.name ?? ''}
                                     />
                                 )}
-                                <AvatarFallback>
-                                    {session?.user?.email}
+                                <AvatarFallback className="h-10 w-10 bg-[#7b20a1] text-xl text-white">
+                                    {session?.user?.name?.charAt(0) ?? 'U'}
                                 </AvatarFallback>
                             </Avatar>
                         </Button>
@@ -63,6 +66,18 @@ export default function UserButton() {
                             <Button
                                 variant="ghost"
                                 className="w-full p-0"
+                                onClick={() => {
+                                    navigate('/resetPassword');
+                                }}
+                            >
+                                Reset Password
+                            </Button>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                            <Button
+                                variant="ghost"
+                                className="w-full p-0 text-red-500 hover:bg-red-500 hover:text-white"
                                 onClick={() => signOut()}
                             >
                                 Sign Out
