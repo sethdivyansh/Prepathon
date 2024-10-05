@@ -371,7 +371,6 @@ export default function ResponsePage() {
                     }: { ctx: CanvasRenderingContext2D; chartArea: ChartArea } =
                         chart;
 
-                    // Fallback color in case chartArea is not available
                     if (!chartArea) {
                         return darkMode ? '#2D2D2F' : '#FF3300';
                     }
@@ -415,7 +414,6 @@ export default function ResponsePage() {
                     }: { ctx: CanvasRenderingContext2D; chartArea: ChartArea } =
                         chart;
 
-                    // Fallback hover color in case chartArea is not available
                     if (!chartArea) {
                         return darkMode ? '#F24A21' : '#4B4B4B';
                     }
@@ -456,14 +454,14 @@ export default function ResponsePage() {
                     </div>
                     <div className="flex w-1/6 items-center justify-center">
                         <Button
-                            onClick={() => navigate('/chatbot')}
+                            onClick={() => navigate('/chat')}
                             className="bg-button_secondary shadow-box_shadow h-12 w-36 rounded-lg text-xl hover:bg-slate-50 dark:hover:bg-[#303030]"
                         >
                             <span className="gemini-gradient"> Ask Gemini</span>
                         </Button>
                     </div>
                 </div>
-                <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
                         <div
                             className={`shadow-box_shadow rounded-xl bg-white p-4 dark:bg-gradient-to-b dark:from-[#222120] dark:via-[#1A1919] dark:to-[#171717]`}

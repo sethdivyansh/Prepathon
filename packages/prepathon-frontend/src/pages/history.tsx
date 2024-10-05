@@ -32,7 +32,7 @@ export default function HistoryPage() {
             time: '3 days ago',
         },
     ]);
-    
+
     const navigate = useNavigate();
     return (
         <div className="flex min-h-screen flex-col bg-gradient-to-r from-slate-600 to-slate-950 p-6 text-white">
@@ -60,7 +60,7 @@ export default function HistoryPage() {
             <div className="mt-auto text-center">
                 <Button
                     className="mt-4 bg-indigo-500 text-white transition-colors duration-200 ease-in-out hover:bg-indigo-600"
-                    onClick={() => navigate('/chatbot')}
+                    onClick={() => navigate('/chat')}
                 >
                     Back to Chatbot
                 </Button>

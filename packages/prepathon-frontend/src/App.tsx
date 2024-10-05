@@ -2,7 +2,6 @@ import Navbar from '@/components/layout/navbar';
 import { SessionProvider } from '@hono/auth-js/react';
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import AuthPage from './pages/auth';
 import ChatbotPage from './pages/chatbot';
 import ComputationsPage from './pages/computations';
 import EmailVerificationPage from './pages/emailverification';
@@ -41,7 +40,7 @@ const AppContent: React.FC = () => {
                                     <LandingPage isDarkMode={isDarkMode} />
                                 }
                             />
-                            <Route path="/chatbot" element={<ChatbotPage />} />
+                            <Route path="/chat" element={<ChatbotPage />} />
                             <Route
                                 path="/computation"
                                 element={<ComputationsPage />}

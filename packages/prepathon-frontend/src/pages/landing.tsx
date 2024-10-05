@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { useSession } from '@hono/auth-js/react';
 import {
     BarElement,
     CategoryScale,
@@ -11,7 +12,7 @@ import {
     Title,
     Tooltip,
 } from 'chart.js';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
 import { useNavigate } from 'react-router-dom';
 
@@ -136,6 +137,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ isDarkMode }) => {
         }),
         [isDarkMode]
     );
+
+    const { data: session } = useSession();
+    useEffect(() => {
+        if (session?.user) return navigate('/computation');
+    });
 
     return (
         <>
