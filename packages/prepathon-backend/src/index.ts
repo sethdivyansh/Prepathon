@@ -151,6 +151,42 @@ app.get('/api/protected', async (c) => {
     return c.json(auth);
 });
 
+app.post('/resetPassword', async (c) => {
+    try {
+        const { session, oldPass, newPass } = await c.req.json();
+        const db = drizzle(c.env.DB);
+        if (!session || !session.user) {
+            return c.json({ error: 'Session or user not found' }, 404);
+        }
+        const authUser = session.user;
+        const user = await db
+            .select()
+            .from(schema.users)
+            .where(eq(schema.users.id, authUser.id!))
+            .get();
+
+        if (!user) {
+            return c.json({ error: 'User not found' }, 404);
+        }
+
+        if (!user.password || !bcrypt.compareSync(oldPass, user.password)) {
+            return c.json({ error: 'Old password is incorrect' }, 400);
+        }
+
+        const passwordHash = await bcrypt.hash(newPass, 10);
+
+        await db
+            .update(schema.users)
+            .set({ password: passwordHash })
+            .where(eq(schema.users.id, authUser.id!));
+
+        return c.json({ success: true });
+    } catch (error) {
+        console.log('Error_in_resetting', (error as Error).message);
+        return c.json({ error: 'Error in resetting password' }, 500);
+    }
+});
+
 // TODO: Add the companies API routes behind the auth middleware
 
 app.get('/companies/raw-data/:id', async (c) => {
