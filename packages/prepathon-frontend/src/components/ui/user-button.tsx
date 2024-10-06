@@ -78,7 +78,10 @@ export default function UserButton() {
                             <Button
                                 variant="ghost"
                                 className="w-full p-0 text-red-500 hover:bg-red-500 hover:text-white"
-                                onClick={() => signOut()}
+                                onClick={() => {
+                                    signOut();
+                                    navigate('/');
+                                }}
                             >
                                 Sign Out
                             </Button>
