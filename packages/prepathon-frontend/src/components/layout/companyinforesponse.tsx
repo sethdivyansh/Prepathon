@@ -1,39 +1,123 @@
 interface CompanyInfoProps {
     data: {
+        sl_no: number;
+        company: string;
         country: string;
-        countryCode: string;
-        diversity: number;  // Changed from string to number
-        marketCap: {
+        country_code: string;
+        diversity: number;
+        market_cap: {
             value: number;
             synthetic: boolean;
         };
+        // total_companies_in_country: number;
+        // domestic_ranking: {
+        //     diversity_ranking: number;
+        //     stock: number;
+        //     expense: number;
+        //     revenue: number;
+        //     market_share: number;
+        // };
+        // global_ranking: {
+        //     stock: number;
+        //     expense: number;
+        //     revenue: number;
+        //     market_share: number;
+        // };
     };
-    theme: 'light' | 'dark';
 }
 
-export default function CompanyInfo({ data, theme }: CompanyInfoProps) {
+export default function CompanyInfo({ data }: CompanyInfoProps) {
     return (
-        <div
-            className={`rounded-lg p-4 shadow-md ${
-                theme === 'dark'
-                    ? 'bg-neutral-800 text-neutral-100'
-                    : 'bg-white text-neutral-900'
-            }`}
-        >
-            <h2 className="mb-4 text-2xl font-bold">Company Information</h2>
-            <p>
-                <strong>Country:</strong> {data.country}
-            </p>
-            <p>
-                <strong>Country Code:</strong> {data.countryCode}
-            </p>
-            <p>
-                <strong>Diversity Index:</strong> {data.diversity}
-            </p>
-            <p>
-                <strong>Market Cap:</strong> ${data.marketCap.value.toLocaleString()}
-                {data.marketCap.synthetic && ' (Synthetic Data)'}
-            </p>
+        <div className="flex w-full flex-row gap-4 bg-background">
+            <div className="w-1/3">
+                <div className="w-full rounded-lg text-primary">
+                    <h2 className="mb-1 text-xl font-bold">
+                        Company Information
+                    </h2>
+                    <div className="text-sm">
+                        <div className="grid grid-cols-2 gap-4">
+                            <span className="text-secondary">Country</span>
+                            <span>{data.country}</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <span className="text-secondary">Country Code</span>
+                            <span>{data.country_code}</span>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <span className="text-secondary">Market Cap</span>
+                            <span>${data.market_cap.value}</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <span className="text-secondary">
+                                Diversity Index
+                            </span>
+                            <span>
+                                {data.diversity}
+                                {/* <p>
+                                    (#{data.domestic_ranking.diversity_ranking}/
+                                    {data.total_companies_in_country} in{' '}
+                                    {data.country})
+                                </p> */}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* <div className="w-1/3">
+                <div className="w-full rounded-lg text-primary">
+                    <h2 className="mb-1 text-xl font-bold">Domestic Ranking</h2>
+                    <div className="text-sm">
+                        <div className="grid grid-cols-2 gap-4">
+                            <span className="text-secondary">Stock Price</span>
+                            <span className="">
+                                #{data.domestic_ranking.stock}
+                            </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <span className="text-secondary">Market Share</span>
+                            <span className="">
+                                #{data.domestic_ranking.stock}
+                            </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <span className="text-secondary">Revenue</span>
+                            <span className="">
+                                #{data.domestic_ranking.revenue}
+                            </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <span className="text-secondary">Expense</span>
+                            <span className="">
+                                #{data.domestic_ranking.expense}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="w-1/3">
+                <div className="w-full rounded-lg text-primary">
+                    <h2 className="mb-1 text-xl font-bold">Global Ranking</h2>
+                    <div className="text-sm">
+                        <div className="grid grid-cols-2 gap-4">
+                            <span className="text-secondary">Stock Price</span>
+                            <span>#{data.global_ranking.stock}</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <span className="text-secondary">Market Share</span>
+                            <span>#{data.global_ranking.stock}</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <span className="text-secondary">Revenue</span>
+                            <span>#{data.global_ranking.revenue}</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <span className="text-secondary">Expense</span>
+                            <span>#{data.global_ranking.expense}</span>
+                        </div>
+                    </div>
+                </div>
+            </div> */}
         </div>
     );
 }

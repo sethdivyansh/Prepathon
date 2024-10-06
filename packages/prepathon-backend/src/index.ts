@@ -1,7 +1,9 @@
+import CredentialsProvider from '@auth/core/providers/credentials';
 import GitHub from '@auth/core/providers/github';
 import Google from '@auth/core/providers/google';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { authHandler, initAuthConfig, verifyAuth } from '@hono/auth-js';
+import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/d1';
 import { Context, Hono } from 'hono';
@@ -44,10 +46,97 @@ app.use(
                 clientId: c.env.AUTH_GITHUB_ID,
                 clientSecret: c.env.AUTH_GITHUB_SECRET,
             }),
+            CredentialsProvider({
+                name: 'credentials',
+                credentials: {
+                    email: { label: 'Email', type: 'text' },
+                    password: { label: 'Password', type: 'password' },
+                },
+                authorize: async (credentials) => {
+                    const db = drizzle(c.env.DB);
+                    const user = await db
+                        .select()
+                        .from(schema.users)
+                        .where(
+                            eq(schema.users.email, credentials.email as string)
+                        )
+                        .get();
+
+                    console.log('user', user);
+
+                    if (
+                        user &&
+                        user.password &&
+                        bcrypt.compareSync(
+                            credentials.password as string,
+                            user.password
+                        )
+                    ) {
+                        console.log('_sign_in_', user);
+                        return user;
+                    } else {
+                        console.log('errorSign_in');
+                        return null;
+                    }
+                },
+            }),
         ],
+        callbacks: {
+            async jwt({ token, user }) {
+                if (user) {
+                    token.id = user.id;
+                }
+                return token;
+            },
+            async session({ session, token }) {
+                console.log('here');
+                if (token) {
+                    session.user.id = token.id as string;
+                }
+                return session;
+            },
+        },
+        session: {
+            strategy: 'jwt',
+        },
         adapter: DrizzleAdapter(drizzle(c.env.DB)),
     }))
 );
+
+app.post('/api/signup', async (c) => {
+    const { name, email, password } = await c.req.json();
+    const db = drizzle(c.env.DB);
+
+    if (!email || !password) {
+        return c.json({ error: 'Missing fields' }, 400);
+    }
+
+    const existingUser = await db
+        .select()
+        .from(schema.users)
+        .where(eq(schema.users.email, email))
+        .get();
+
+    if (existingUser) {
+        return c.json({ error: 'User already exists' }, 409);
+    }
+
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    // Insert new user
+    const newUser = await db
+        .insert(schema.users)
+        .values({
+            name,
+            email,
+            password: passwordHash,
+        })
+        .returning({ id: schema.users.id, email: schema.users.email })
+        .get();
+
+    return c.json({ id: newUser.id, username: newUser.email }, 201);
+});
 
 app.get('/', async (c) => {
     return c.redirect('http://localhost:3000');
@@ -60,6 +149,42 @@ app.use('/api/*', verifyAuth());
 app.get('/api/protected', async (c) => {
     const auth = c.get('authUser');
     return c.json(auth);
+});
+
+app.post('/resetPassword', async (c) => {
+    try {
+        const { session, oldPass, newPass } = await c.req.json();
+        const db = drizzle(c.env.DB);
+        if (!session || !session.user) {
+            return c.json({ error: 'Session or user not found' }, 404);
+        }
+        const authUser = session.user;
+        const user = await db
+            .select()
+            .from(schema.users)
+            .where(eq(schema.users.id, authUser.id!))
+            .get();
+
+        if (!user) {
+            return c.json({ error: 'User not found' }, 404);
+        }
+
+        if (!user.password || !bcrypt.compareSync(oldPass, user.password)) {
+            return c.json({ error: 'Old password is incorrect' }, 400);
+        }
+
+        const passwordHash = await bcrypt.hash(newPass, 10);
+
+        await db
+            .update(schema.users)
+            .set({ password: passwordHash })
+            .where(eq(schema.users.id, authUser.id!));
+
+        return c.json({ success: true });
+    } catch (error) {
+        console.log('Error_in_resetting', (error as Error).message);
+        return c.json({ error: 'Error in resetting password' }, 500);
+    }
 });
 
 // TODO: Add the companies API routes behind the auth middleware
@@ -170,7 +295,8 @@ async function analyzeCompanyBackground(
                 status: 'error',
                 endTime: Date.now(),
                 result: JSON.stringify({
-                    error: error.message || 'An unknown error occurred',
+                    error:
+                        (error as Error).message || 'An unknown error occurred',
                     totalResponseTime: (Date.now() - startTime) / 1000, // in seconds
                 }),
             })

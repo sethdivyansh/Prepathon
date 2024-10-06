@@ -1,13 +1,15 @@
 import HistoryItem from '@/components/layout/historyitem';
+import Sidebar from '@/components/layout/responsesidebar';
 import { signOut } from '@hono/auth-js/react';
+import SendIcon from '/public/SendIcon.svg';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 
 export interface ChatHistoryItem {
-    title: string,
-    description: string,
-    time: string
+    title: string;
+    description: string;
+    time: string;
 }
 
 export default function ChatbotPage() {
@@ -21,7 +23,7 @@ export default function ChatbotPage() {
         'What companies have a Diversity greater than 50%',
     ];
 
-    const [chatHistory,setChatHistory] = useState<ChatHistoryItem[]>([
+    const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([
         {
             title: 'Indian Companies',
             description: 'Fetched all companies based in India.',
@@ -59,80 +61,97 @@ export default function ChatbotPage() {
     }, []);
 
     return (
-        <div className="flex min-h-screen flex-col justify-between bg-gradient-to-r from-slate-600 to-slate-950 p-6 text-white">
-            <header className="flex items-center justify-between py-4">
-                <h1 className="text-3xl font-bold">{greeting}, User</h1>
-                <Button
-                    className="mt-2 bg-gray-800 text-white transition-colors duration-200 ease-in-out hover:bg-gray-700"
-                    onClick={() => navigate('/history')} 
-                >
-                    History
-                </Button>
-                <Button
-                    className="mt-2 bg-gray-800 text-white transition-colors duration-200 ease-in-out hover:bg-gray-700"
-                    onClick={() => {
-                        signOut();
-                        navigate('/');
-                    }}
-                >
-                    Logout
-                </Button>
-            </header>
+        <div className="flex min-h-screen">
+            <Sidebar />
+            <div className="flex flex-col">
+                <header className="flex justify-center py-4">
+                    <h1 className="gemini-gradient text-4xl font-bold">
+                        {greeting}, User
+                    </h1>
+                    {/* <Button
+                        className="mt-2 bg-gray-800 text-white transition-colors duration-200 ease-in-out hover:bg-gray-700"
+                        onClick={() => navigate('/history')}
+                    >
+                        History
+                    </Button> */}
+                    {/* <Button
+                        className="mt-2 bg-gray-800 text-white transition-colors duration-200 ease-in-out hover:bg-gray-700"
+                        onClick={() => {
+                            signOut();
+                            navigate('/');
+                        }}
+                    >
+                        Logout
+                    </Button> */}
+                </header>
 
-            <section className="mt-4 flex justify-center">
-                <div className="w-full rounded-lg bg-gray-800 p-4 shadow-md sm:w-2/3 md:w-1/2">
-                    <h2 className="mb-4 text-center text-xl font-semibold">
-                        Enter your prompt here!
-                    </h2>
-                    <div className="flex items-center">
-                        <input
-                            type="text"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            placeholder="Type your message here..."
-                            className="mr-2 w-full rounded-lg bg-gray-700 p-2 text-white outline-none transition-shadow duration-200 ease-in-out focus:ring-2 focus:ring-indigo-500"
-                        />
-                        <Button
-                            onClick={handleSendMessage}
-                            className="rounded-r-md bg-indigo-500 px-6 py-2 text-white transition-colors duration-200 ease-in-out hover:bg-indigo-600"
-                        >
-                            Send
-                        </Button>
+                <section className="mt-4 flex w-full justify-center">
+                    <div className="shadow-box_shadow w-full rounded-xl p-4 text-[#404040] dark:bg-[#1F1F1F] dark:text-[#CCCCCC] sm:w-2/3 md:w-2/3">
+                        <h2 className="my-1 text-center text-2xl font-semibold">
+                            Enter your prompt here!
+                        </h2>
+                        <div className="relative flex items-center p-4">
+                            <input
+                                type="text"
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                placeholder="Type your message here..."
+                                className="shadow-box_shadow mx-auto w-full rounded-xl bg-[#F8F8F8] p-4 pr-12 outline-none transition-shadow duration-200 ease-in-out placeholder:text-[#828282] focus:ring-1 focus:ring-indigo-500 focus:placeholder:text-[#CCCCCC] dark:bg-[#292929]"
+                            />
+                            {input && (
+                                <button
+                                    onClick={handleSendMessage}
+                                    className="absolute right-4 flex items-center justify-center rounded-full p-2"
+                                >
+                                    <img
+                                        src={SendIcon}
+                                        alt="Send"
+                                        className="h-8 w-8"
+                                    />
+                                </button>
+                            )}
+                            {/* <Button
+                                onClick={handleSendMessage}
+                                className="rounded-r-md bg-indigo-500 px-6 py-2 text-white transition-colors duration-200 ease-in-out hover:bg-indigo-600"
+                            >
+                                Send
+                            </Button> */}
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <section className="mt-6 text-center">
-                <p className="text-lg text-gray-400">
-                    How can I assist you today?
-                </p>
-                <div className="mt-4 flex flex-wrap justify-center gap-4">
-                    {examplePrompts.map((prompt, index) => (
-                        <Button
-                            key={index}
-                            className="rounded-lg bg-gray-800 px-6 py-2 text-white shadow transition-colors duration-200 ease-in-out hover:bg-gray-700"
-                        >
-                            {prompt}
-                        </Button>
-                    ))}
-                </div>
-            </section>
+                <section className="mt-10 text-center">
+                    <p className="text-4xl font-semibold text-secondary">
+                        How can I assist you today?
+                    </p>
+                    <div className="mt-6 flex flex-wrap justify-center gap-4">
+                        {examplePrompts.map((prompt, index) => (
+                            <Button
+                                key={index}
+                                className="shadow-box_shadow rounded-lg bg-[#F8F8F8] px-6 py-2 font-light text-[#404040] shadow transition-colors duration-200 ease-in-out hover:bg-gray-700 dark:bg-[#292929] dark:text-primary"
+                            >
+                                {prompt}
+                            </Button>
+                        ))}
+                    </div>
+                </section>
 
-            <section className="mt-12">
-                <h2 className="mb-4 text-center text-xl font-semibold">
-                    Your recent chats
-                </h2>
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-                    {chatHistory.map((chat, index) => (
-                        <HistoryItem
-                            key={index}
-                            title={chat.title}
-                            description={chat.description}
-                            time={chat.time}
-                        />
-                    ))}
-                </div>
-            </section>
+                {/* <section className="mt-12">
+                    <h2 className="mb-4 text-center text-xl font-semibold">
+                        Your recent chats
+                    </h2>
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+                        {chatHistory.map((chat, index) => (
+                            <HistoryItem
+                                key={index}
+                                title={chat.title}
+                                description={chat.description}
+                                time={chat.time}
+                            />
+                        ))}
+                    </div>
+                </section> */}
+            </div>
         </div>
     );
 }
