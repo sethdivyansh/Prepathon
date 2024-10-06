@@ -52,7 +52,9 @@ CREATE TABLE `user` (
 	`email` text,
 	`emailVerified` integer,
 	`image` text,
-	`password` text
+	`password` text,
+	`passkeyChallenge` text,
+	`passkey` text
 );
 --> statement-breakpoint
 CREATE TABLE `verificationToken` (

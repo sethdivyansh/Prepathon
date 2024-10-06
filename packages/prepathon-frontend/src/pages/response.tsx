@@ -183,7 +183,6 @@ export default function ResponsePage() {
 
     useEffect(() => {
         setdarkMode(theme === 'dark');
-        console.log('darkMode', darkMode);
     }, [darkMode, theme]);
 
     const barChartOptions = {
@@ -455,7 +454,7 @@ export default function ResponsePage() {
                     <div className="flex w-1/6 items-center justify-center">
                         <Button
                             onClick={() => navigate('/chat')}
-                            className="bg-button_secondary shadow-box_shadow h-12 w-36 rounded-lg text-xl hover:bg-slate-50 dark:hover:bg-[#303030]"
+                            className="h-12 w-36 rounded-lg bg-button_secondary text-xl shadow-box_shadow hover:bg-slate-50 dark:hover:bg-[#303030]"
                         >
                             <span className="gemini-gradient"> Ask Gemini</span>
                         </Button>
@@ -464,7 +463,7 @@ export default function ResponsePage() {
                 <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
                         <div
-                            className={`shadow-box_shadow rounded-xl bg-white p-4 dark:bg-gradient-to-b dark:from-[#222120] dark:via-[#1A1919] dark:to-[#171717]`}
+                            className={`rounded-xl bg-white p-4 shadow-box_shadow dark:bg-gradient-to-b dark:from-[#222120] dark:via-[#1A1919] dark:to-[#171717]`}
                         >
                             <h3 className="mb-2 text-center text-xl font-semibold text-primary">
                                 Market Share

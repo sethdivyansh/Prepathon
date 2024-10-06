@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "f18ba496-6348-48c1-9f40-e62b85dcda53",
+  "id": "96501552-70ad-48a1-b53c-2a69bfdb8aa4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
@@ -370,6 +370,20 @@
         },
         "password": {
           "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "passkeyChallenge": {
+          "name": "passkeyChallenge",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "passkey": {
+          "name": "passkey",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
