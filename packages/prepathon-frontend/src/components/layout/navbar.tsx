@@ -68,7 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleDarkMode, isDarkMode }) => {
                         <p></p>
                     )}
                     <Button
-                        className="shadow-box_shadow flex h-12 w-48 justify-around rounded-lg bg-white text-primary hover:bg-[#F8F8F8] dark:bg-[#55555566] dark:hover:bg-[#303030]"
+                        className="flex h-12 w-48 justify-around rounded-lg bg-white text-primary shadow-box_shadow hover:bg-[#F8F8F8] dark:bg-[#55555566] dark:hover:bg-[#303030]"
                         onClick={toggleDarkMode}
                     >
                         <p>Enable Dark Mode</p>

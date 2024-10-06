@@ -2,6 +2,7 @@ import CredentialsProvider from '@auth/core/providers/credentials';
 import GitHub from '@auth/core/providers/github';
 import Google from '@auth/core/providers/google';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { authHandler, initAuthConfig, verifyAuth } from '@hono/auth-js';
 import {
     generateAuthenticationOptions,
@@ -25,6 +26,7 @@ interface Bindings {
     AUTH_GITHUB_SECRET: string;
     AUTH_SECRET: string;
     DB: D1Database;
+    GEMINI_API_KEY: string;
 }
 
 const app = new Hono<{ Bindings: Bindings }>();
@@ -339,6 +341,47 @@ app.get('/companies/raw-data/:id', async (c) => {
         return c.json({ message: 'Company not found' }, 404);
     }
     return c.json(company);
+});
+
+app.get('/companies/gemini-analyze/:id', async (c) => {
+    try {
+        const genAI = new GoogleGenerativeAI(c.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+        const id = c.req.param('id');
+        const company = data.find((company) => company.sl_no === parseInt(id));
+
+        if (!company) {
+            return c.json({ message: 'Company not found' }, 404);
+        }
+
+        const prompt = `
+    You are a financial advisor tasked with analyzing the following fictional company data:
+    - Company Name: ${company.company}
+    - Market Cap: ${JSON.stringify(company.market_cap)}
+    - Revenue: ${JSON.stringify(company.revenue)}
+    - Expenses: ${JSON.stringify(company.expense)}
+    - Market Share: ${JSON.stringify(company.market_share)}
+    - Stock Price: ${JSON.stringify(company.stock_price)}
+    - Country: ${company.country}
+    - Diversity Score: ${company.diversity}
+
+    Provide a detailed financial analysis based solely on the provided data, including key insights and recommendations for investment. 
+    Some values are synthetic, generated using a machine learning model for predictive purposes (this information should NOT be included in the analysis). 
+
+    Important notes:
+    - Do NOT create or infer data beyond what's provided.
+    - Do NOT request additional information.
+    - Focus on actionable insights using only the given metrics.
+`;
+
+        const result = await model.generateContent([prompt]);
+
+        return c.json({ result });
+    } catch (error) {
+        console.error('Error in /companies/gemini-analyze:', error);
+        return c.json({ error: 'Internal server error' }, 500);
+    }
 });
 
 app.get('/companies', async (c) => {

@@ -16,7 +16,7 @@ export default function ChartCard({
 }: ChartCardProps) {
     return (
         <div
-            className={`shadow-box_shadow rounded-xl bg-white p-4 dark:bg-gradient-to-b dark:from-[#222120] dark:via-[#1A1919] dark:to-[#171717]`}
+            className={`rounded-xl bg-white p-4 shadow-box_shadow dark:bg-gradient-to-b dark:from-[#222120] dark:via-[#1A1919] dark:to-[#171717]`}
         >
             <h3 className="mb-2 text-center text-xl font-semibold text-primary">
                 {title}

@@ -2,6 +2,7 @@ import ChartCard from '@/components/layout/chartcard';
 import CompanyInfo from '@/components/layout/companyinforesponse';
 import Sidebar from '@/components/layout/responsesidebar';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
     CategoryScale,
     ChartArea,
@@ -16,6 +17,7 @@ import {
 } from 'chart.js';
 import { useEffect, useRef, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
+import ReactMarkdown from 'react-markdown';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 ChartJS.register(
@@ -75,6 +77,39 @@ export default function ResponsePage() {
     const barRef = useRef(null);
     const theme = localStorage.getItem('theme') || 'light';
     const [darkMode, setdarkMode] = useState(theme === 'dark');
+    const [geminiAnalysis, setGeminiAnalysis] = useState('');
+
+    useEffect(() => {
+        const fetchGeminiAnalysis = async () => {
+            try {
+                const params = new URLSearchParams(location.search);
+                const id = params.get('id');
+
+                const response = await fetch(
+                    `http://localhost:5000/companies/gemini-analyze/${id}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                );
+                if (!response.ok) {
+                    throw new Error('Failed to fetch Gemini analysis');
+                }
+                const data = await response.json();
+                const analysisText =
+                    data.result?.response?.candidates?.[0]?.content?.parts?.[0]
+                        ?.text || 'No analysis available.';
+                setGeminiAnalysis(analysisText);
+            } catch (error) {
+                console.error('Error fetching Gemini analysis:', error);
+                setGeminiAnalysis('Failed to load Gemini analysis.');
+            }
+        };
+
+        fetchGeminiAnalysis();
+    }, [location.search]);
 
     const [companyData, setCompanyData] = useState<CompanyData>({
         sl_no: 1,
@@ -491,6 +526,26 @@ export default function ResponsePage() {
                             options={spendActivityOptions}
                             height={60}
                         />
+                    </div>
+                    <div className="col-span-2">
+                        <Card className="h-full">
+                            <CardHeader>
+                                <h3 className="text-center text-xl font-semibold text-primary">
+                                    Gemini Analysis
+                                </h3>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="max-h-96 overflow-y-auto">
+                                    {geminiAnalysis ? (
+                                        <ReactMarkdown>
+                                            {geminiAnalysis}
+                                        </ReactMarkdown>
+                                    ) : (
+                                        <p>Loading Gemini analysis...</p>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </Card>
                     </div>
                 </div>
             </div>
