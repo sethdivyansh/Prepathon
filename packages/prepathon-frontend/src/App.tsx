@@ -5,6 +5,7 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import ChatbotPage from './pages/chatbot';
 import ComputationsPage from './pages/computations';
 import EmailVerificationPage from './pages/emailverification';
+import FA2 from './pages/fa2';
 import ForgotPasswordPage from './pages/forgotpass';
 import HistoryPage from './pages/history';
 import LandingPage from './pages/landing';
@@ -68,6 +69,8 @@ const AppContent: React.FC = () => {
                                 path="/register"
                                 element={<RegisterPage />}
                             />
+                            <Route path="/2fa-createKey" element={<FA2 />} />
+                            <Route path="/2fa-verifyKey" element={<FA2 />} />
                         </Routes>
                     </div>
                 </Router>

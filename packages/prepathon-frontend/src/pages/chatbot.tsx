@@ -1,6 +1,5 @@
 import HistoryItem from '@/components/layout/historyitem';
 import Sidebar from '@/components/layout/responsesidebar';
-import { signOut } from '@hono/auth-js/react';
 import SendIcon from '/public/SendIcon.svg';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -86,7 +85,7 @@ export default function ChatbotPage() {
                 </header>
 
                 <section className="mt-4 flex w-full justify-center">
-                    <div className="shadow-box_shadow w-full rounded-xl p-4 text-[#404040] dark:bg-[#1F1F1F] dark:text-[#CCCCCC] sm:w-2/3 md:w-2/3">
+                    <div className="w-full rounded-xl p-4 text-[#404040] shadow-box_shadow dark:bg-[#1F1F1F] dark:text-[#CCCCCC] sm:w-2/3 md:w-2/3">
                         <h2 className="my-1 text-center text-2xl font-semibold">
                             Enter your prompt here!
                         </h2>
@@ -96,7 +95,7 @@ export default function ChatbotPage() {
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 placeholder="Type your message here..."
-                                className="shadow-box_shadow mx-auto w-full rounded-xl bg-[#F8F8F8] p-4 pr-12 outline-none transition-shadow duration-200 ease-in-out placeholder:text-[#828282] focus:ring-1 focus:ring-indigo-500 focus:placeholder:text-[#CCCCCC] dark:bg-[#292929]"
+                                className="mx-auto w-full rounded-xl bg-[#F8F8F8] p-4 pr-12 shadow-box_shadow outline-none transition-shadow duration-200 ease-in-out placeholder:text-[#828282] focus:ring-1 focus:ring-indigo-500 focus:placeholder:text-[#CCCCCC] dark:bg-[#292929]"
                             />
                             {input && (
                                 <button
@@ -128,7 +127,7 @@ export default function ChatbotPage() {
                         {examplePrompts.map((prompt, index) => (
                             <Button
                                 key={index}
-                                className="shadow-box_shadow rounded-lg bg-[#F8F8F8] px-6 py-2 font-light text-[#404040] shadow transition-colors duration-200 ease-in-out hover:bg-gray-700 dark:bg-[#292929] dark:text-primary"
+                                className="shadow rounded-lg bg-[#F8F8F8] px-6 py-2 font-light text-[#404040] shadow-box_shadow transition-colors duration-200 ease-in-out hover:bg-[#FFFFFF] dark:bg-[#292929] dark:text-primary dark:hover:bg-[#303030]"
                             >
                                 {prompt}
                             </Button>

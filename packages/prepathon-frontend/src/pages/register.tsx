@@ -28,7 +28,9 @@ const RegisterPage = () => {
             throw new Error('Signup failed');
         }
 
-        signIn('credentials', { email, password });
+        navigate('/2fa-createKey', { state: { email, password } });
+
+        // signIn('credentials', { email, password });
     };
 
     useEffect(() => {
@@ -41,7 +43,7 @@ const RegisterPage = () => {
                 <div className="flex h-full items-center justify-center">
                     <form
                         onSubmit={handleSubmit}
-                        className="shadow-box_shadow m-auto flex w-auto flex-col justify-items-start gap-5 rounded-xl p-8 dark:bg-[#181818a3]"
+                        className="m-auto flex w-auto flex-col justify-items-start gap-5 rounded-xl p-8 shadow-box_shadow dark:bg-[#181818a3]"
                     >
                         <h1 className="text-2xl font-semibold text-primary md:text-[2.5rem]">
                             Create New Account
@@ -87,7 +89,7 @@ const RegisterPage = () => {
                         </div>
                         <div className="flex justify-between space-x-6">
                             <Button
-                                className="shadow-box_shadow h-8 w-full rounded-lg bg-white text-black hover:bg-gray-100 dark:bg-[#1F1F1F] dark:text-[#828282] md:h-10"
+                                className="h-8 w-full rounded-lg bg-white text-black shadow-box_shadow hover:bg-gray-100 dark:bg-[#1F1F1F] dark:text-[#828282] md:h-10"
                                 onClick={() => signIn('google')}
                             >
                                 <img
@@ -98,7 +100,7 @@ const RegisterPage = () => {
                                 Sign up
                             </Button>
                             <Button
-                                className="shadow-box_shadow h-8 w-full rounded-lg bg-white text-black hover:bg-gray-100 dark:bg-[#1F1F1F] dark:text-[#828282] md:h-10"
+                                className="h-8 w-full rounded-lg bg-white text-black shadow-box_shadow hover:bg-gray-100 dark:bg-[#1F1F1F] dark:text-[#828282] md:h-10"
                                 onClick={() => signIn('github')}
                             >
                                 <img

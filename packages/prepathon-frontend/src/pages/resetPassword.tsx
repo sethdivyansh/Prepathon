@@ -15,10 +15,6 @@ export default function ResetPassword() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (confirmPass === newPass) {
-            console.log('Old Password: ', oldPass);
-            console.log('New Password   : ', newPass);
-            console.log('Confirm Password: ', confirm);
-
             setIsMatch(true);
         } else if (confirmPass === '' || newPass === '') {
             setIsMatch(true);
@@ -43,7 +39,6 @@ export default function ResetPassword() {
             );
 
             const data = await response.json();
-            console.log(data);
 
             if (data.success) {
                 alert('Password Reset Successfully');
@@ -63,7 +58,7 @@ export default function ResetPassword() {
                 <div className="flex h-full items-center justify-center">
                     <form
                         onSubmit={handleSubmit}
-                        className="shadow-box_shadow m-auto flex w-96 flex-col justify-items-start gap-5 rounded-xl p-8 dark:bg-[#181818a3]"
+                        className="m-auto flex w-96 flex-col justify-items-start gap-5 rounded-xl p-8 shadow-box_shadow dark:bg-[#181818a3]"
                     >
                         <h1 className="text-4xl font-semibold text-primary md:text-4xl">
                             Reset Password
@@ -88,7 +83,7 @@ export default function ResetPassword() {
                         />
                         <Button
                             onClick={() => handleSubmit}
-                            className="text-md bg-button_primary h-10 w-full rounded-lg font-semibold text-[#ffffff] hover:bg-[#ff6b3d] dark:hover:bg-[#FF5126] md:h-12"
+                            className="text-md h-10 w-full rounded-lg bg-button_primary font-semibold text-[#ffffff] hover:bg-[#ff6b3d] dark:hover:bg-[#FF5126] md:h-12"
                             type="submit"
                         >
                             Reset

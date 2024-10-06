@@ -80,7 +80,7 @@ export default function ComputationsPage() {
         <div className={`flex min-h-screen`}>
             <Sidebar />
             <div className="flex-1 p-2">
-                <div className="shadow-box_shadow mb-6 rounded-full">
+                <div className="mb-6 rounded-full shadow-box_shadow">
                     <input
                         type="text"
                         placeholder="Search by company name, S.No, or country"
@@ -91,7 +91,7 @@ export default function ComputationsPage() {
                 </div>
 
                 <Card
-                    className={`shadow-box_shadow rounded-lg bg-white p-4 dark:bg-neutral-800`}
+                    className={`rounded-lg bg-white p-4 shadow-box_shadow dark:bg-neutral-800`}
                 >
                     <div className="overflow-x-auto">
                         <table className={`w-full text-primary`}>
@@ -152,7 +152,7 @@ export default function ComputationsPage() {
                                                     handleSubmit(company)
                                                 }
                                                 size="sm"
-                                                className={`bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600`}
+                                                className={`bg-button_primary text-white hover:bg-[#ff6b3d] dark:hover:bg-[#FF5126]`}
                                             >
                                                 Submit
                                             </Button>

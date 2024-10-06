@@ -13,10 +13,8 @@ export default function LoginPage() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Email: ', email);
-        console.log('Password: ', password);
         try {
-            signIn('credentials', { email, password });
+            navigate('/2fa-verifyKey', { state: { email, password } });
         } catch (error) {
             console.error('Login failed', error);
         }
@@ -32,7 +30,7 @@ export default function LoginPage() {
                 <div className="flex h-full items-center justify-center">
                     <form
                         onSubmit={handleSubmit}
-                        className="shadow-box_shadow m-auto flex w-auto flex-col justify-items-start gap-5 rounded-xl p-8 dark:bg-[#181818a3] md:w-[26rem]"
+                        className="m-auto flex w-auto flex-col justify-items-start gap-5 rounded-xl p-8 shadow-box_shadow dark:bg-[#181818a3] md:w-[26rem]"
                     >
                         <h1 className="text-4xl font-semibold text-primary md:text-[2.5rem]">
                             Login
@@ -60,14 +58,14 @@ export default function LoginPage() {
                         />
                         <Button
                             onClick={() => handleSubmit}
-                            className="text-md bg-button_primary h-10 w-full rounded-lg font-semibold text-[#ffffff] hover:bg-[#ff6b3d] dark:hover:bg-[#FF5126] md:h-12"
+                            className="text-md h-10 w-full rounded-lg bg-button_primary font-semibold text-[#ffffff] hover:bg-[#ff6b3d] dark:hover:bg-[#FF5126] md:h-12"
                             type="submit"
                         >
                             Sign in
                         </Button>
                         <a
                             href="/forgotpassword"
-                            className="text-button_primary -my-3 mr-4 text-right text-sm hover:underline"
+                            className="-my-3 mr-4 text-right text-sm text-button_primary hover:underline"
                         >
                             Forgot Password?
                         </a>
@@ -78,7 +76,7 @@ export default function LoginPage() {
                         </div>
                         <div className="flex justify-between space-x-6">
                             <Button
-                                className="shadow-box_shadow h-8 w-full rounded-lg bg-white text-black hover:bg-gray-100 dark:bg-[#1F1F1F] dark:text-[#828282] md:h-10"
+                                className="h-8 w-full rounded-lg bg-white text-black shadow-box_shadow hover:bg-gray-100 dark:bg-[#1F1F1F] dark:text-[#828282] md:h-10"
                                 onClick={() => signIn('google')}
                             >
                                 <img
@@ -89,7 +87,7 @@ export default function LoginPage() {
                                 Sign in
                             </Button>
                             <Button
-                                className="shadow-box_shadow h-8 w-full rounded-lg bg-white text-black hover:bg-gray-100 dark:bg-[#1F1F1F] dark:text-[#828282] md:h-10"
+                                className="h-8 w-full rounded-lg bg-white text-black shadow-box_shadow hover:bg-gray-100 dark:bg-[#1F1F1F] dark:text-[#828282] md:h-10"
                                 onClick={() => signIn('github')}
                             >
                                 <img
