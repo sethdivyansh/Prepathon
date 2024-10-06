@@ -3,6 +3,12 @@ import GitHub from '@auth/core/providers/github';
 import Google from '@auth/core/providers/google';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { authHandler, initAuthConfig, verifyAuth } from '@hono/auth-js';
+import {
+    generateAuthenticationOptions,
+    generateRegistrationOptions,
+    verifyAuthenticationResponse,
+    verifyRegistrationResponse,
+} from '@simplewebauthn/server';
 import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/d1';
@@ -10,6 +16,7 @@ import { Context, Hono } from 'hono';
 import { cors } from 'hono/cors';
 import data, { CompanyData, YearlyData } from '../data';
 import * as schema from './schema';
+import { deserializePasskey, serializePasskey } from './utils/convert';
 
 interface Bindings {
     AUTH_GOOGLE_ID: string;
@@ -62,8 +69,6 @@ app.use(
                         )
                         .get();
 
-                    console.log('user', user);
-
                     if (
                         user &&
                         user.password &&
@@ -72,10 +77,8 @@ app.use(
                             user.password
                         )
                     ) {
-                        console.log('_sign_in_', user);
                         return user;
                     } else {
-                        console.log('errorSign_in');
                         return null;
                     }
                 },
@@ -89,7 +92,6 @@ app.use(
                 return token;
             },
             async session({ session, token }) {
-                console.log('here');
                 if (token) {
                     session.user.id = token.id as string;
                 }
@@ -136,6 +138,147 @@ app.post('/api/signup', async (c) => {
         .get();
 
     return c.json({ id: newUser.id, username: newUser.email }, 201);
+});
+
+app.post('api/auth/create-passkey', async (c) => {
+    try {
+        const { email } = await c.req.json();
+        const db = drizzle(c.env.DB);
+
+        const user = await db
+            .select()
+            .from(schema.users)
+            .where(eq(schema.users.email, email))
+            .get();
+
+        if (!user) {
+            return c.json({ error: 'User not found' }, 404);
+        }
+
+        const challengePayload = await generateRegistrationOptions({
+            rpID: 'localhost',
+            rpName: 'InterIIT',
+            userName: user.email || '',
+            userID: new Uint8Array(),
+        });
+
+        user.passkeyChallenge = challengePayload.challenge;
+
+        await db
+            .update(schema.users)
+            .set({ passkeyChallenge: challengePayload.challenge })
+            .where(eq(schema.users.email, email));
+
+        return c.json({ user: user, options: challengePayload });
+    } catch (error) {
+        console.error(
+            'Error in /api/auth/create-passkey:',
+            (error as Error).message
+        );
+        return c.json({ error: 'Internal server error' }, 500);
+    }
+});
+app.post('api/auth/verify-creation', async (c) => {
+    try {
+        const db = drizzle(c.env.DB);
+        const data = await c.req.json();
+
+        const email = data.email;
+        const cred = data.cred;
+        const user = data.user;
+
+        const challengeResult = await db
+            .select()
+            .from(schema.users)
+            .where(eq(schema.users.email, email))
+            .get();
+
+        const verificationResult = await verifyRegistrationResponse({
+            expectedChallenge: challengeResult?.passkeyChallenge || '',
+            expectedOrigin: 'http://localhost:3000',
+            expectedRPID: 'localhost',
+            response: cred,
+        });
+
+        if (!verificationResult.verified) {
+            return c.json({ error: 'could not verify' });
+        }
+
+        const serializedKey = serializePasskey(
+            verificationResult.registrationInfo
+        );
+
+        user.passkey = serializedKey;
+
+        await db
+            .update(schema.users)
+            .set({ passkey: JSON.stringify(serializedKey) })
+            .where(eq(schema.users.id, user.id));
+
+        return c.json({ verified: true });
+    } catch (error) {
+        console.error(
+            'Error in /api/auth/verify-creation:',
+            (error as Error).message
+        );
+        return c.json({ error: 'Internal server error' }, 500);
+    }
+});
+
+app.post('/api/auth/login-challenge', async (c) => {
+    try {
+        const options = await generateAuthenticationOptions({
+            rpID: 'localhost',
+        });
+
+        return c.json({
+            options,
+        });
+    } catch (err) {
+        console.error(
+            'Error in /api/auth/login-challenge:',
+            (err as Error).message
+        );
+        return c.json({ error: 'Error in generating login challenge' }, 400);
+    }
+});
+
+app.post('/api/auth/verify-key', async (c) => {
+    try {
+        const db = drizzle(c.env.DB);
+        const { email, cred, challenge } = await c.req.json();
+        const user = await db
+            .select()
+            .from(schema.users)
+            .where(eq(schema.users.email, email))
+            .get();
+
+        if (!user) {
+            return c.json({ error: 'user not found' }, 404);
+        }
+
+        const passkey = deserializePasskey(JSON.parse(user.passkey!));
+
+        const result = await verifyAuthenticationResponse({
+            expectedChallenge: challenge,
+            expectedOrigin: 'http://localhost:3000',
+            expectedRPID: 'localhost',
+            response: cred,
+            authenticator: passkey,
+        });
+
+        if (!result.verified) {
+            return c.json({ error: 'could not verify' });
+        }
+
+        return c.json({ success: true });
+    } catch (error) {
+        console.error(
+            'Error in /api/auth/verify-key:',
+            (error as Error).message
+        );
+        return c.json({ error: (error as Error).message }, 500);
+    }
 });
 
 app.get('/', async (c) => {

@@ -15,6 +15,8 @@ export const users = sqliteTable('user', {
     emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
     image: text('image'),
     password: text('password'),
+    passkeyChallenge: text('passkeyChallenge'),
+    passkey: text('passkey'),
 });
 
 export const accounts = sqliteTable(

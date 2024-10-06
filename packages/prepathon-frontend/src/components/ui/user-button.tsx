@@ -42,7 +42,9 @@ export default function UserButton() {
                                     />
                                 )}
                                 <AvatarFallback className="h-10 w-10 bg-[#7b20a1] text-xl text-white">
-                                    {session?.user?.name?.charAt(0) ?? 'U'}
+                                    {session?.user?.name
+                                        ?.charAt(0)
+                                        .toUpperCase() ?? 'U'}
                                 </AvatarFallback>
                             </Avatar>
                         </Button>
@@ -78,7 +80,10 @@ export default function UserButton() {
                             <Button
                                 variant="ghost"
                                 className="w-full p-0 text-red-500 hover:bg-red-500 hover:text-white"
-                                onClick={() => signOut()}
+                                onClick={() => {
+                                    signOut();
+                                    navigate('/');
+                                }}
                             >
                                 Sign Out
                             </Button>
